@@ -1,5 +1,5 @@
 {
-  "name": "send-message-api",
+  "name": "messaging-api",
   "version": "1.0.0",
   "description": "Messaging API",
   "main": "index.js",
@@ -20,6 +20,8 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@fastify/jwt": "^7.2.0",
+    "dotenv": "^16.3.1",
     "fastify": "^4.18.0"
   }
 }

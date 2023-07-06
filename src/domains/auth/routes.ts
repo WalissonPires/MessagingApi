@@ -1,5 +1,5 @@
 import { AppError } from "../../common/errors/app-error";
-import { AppServer, UserAuthenticate } from "../../server/base";
+import { AppServer } from "../../server/base";
 
 
 export default function (fastify: AppServer) {
@@ -21,7 +21,7 @@ export default function (fastify: AppServer) {
 
     fastify.get('/auth/me', { onRequest: [ fastify.authenticate ] }, (request, reply) => {
 
-        const user = request.user as UserAuthenticate;
+        const { user } = request.diScope.cradle;
 
         return {
             userId: user.userId

@@ -14,7 +14,7 @@ export default function registerPlugins(app: AppServer, config: AppConfig) {
 
             const  { user } = request.diScope.cradle;
             user.isAuthenticated = true;
-            user.userId = request.user.userId;
+            user.accountId = request.user.accountId;
         }
 
         done();

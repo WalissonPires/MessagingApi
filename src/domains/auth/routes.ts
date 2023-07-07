@@ -1,20 +1,23 @@
 import { AppError } from "../../common/errors/app-error";
 import { AppServer } from "../../server/base";
-
+import { UserAuthenticate } from "./entities";
 
 export default function (fastify: AppServer) {
 
-    fastify.post<{ Body: SignModel }>('/auth/sign', (request, reply) => {
+    fastify.post<{ Body: SignModel }>('/auth/sign', async (request, reply) => {
 
         const { username, password } = request.body ?? {};
+        const { findAccountByUserPass } = request.diScope.cradle;
 
-        const userMatch = /*username === 'test' &&*/ password === 'test';
-        if (!userMatch)
+        const account = await findAccountByUserPass.execute({ username, password });
+        if (!account)
             throw new AppError('Invalid user/password');
 
-        const token = fastify.jwt.sign({
-            userId: username
-        });
+        const payload: UserAuthenticate = {
+            accountId: account.accountId
+        };
+
+        const token = fastify.jwt.sign(payload);
 
         return { token };
     });
@@ -24,7 +27,7 @@ export default function (fastify: AppServer) {
         const { user } = request.diScope.cradle;
 
         return {
-            userId: user.userId
+            accountId: user.accountId
         };
     });
 }

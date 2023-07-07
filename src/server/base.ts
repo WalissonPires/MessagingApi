@@ -1,12 +1,9 @@
 import { FastifyInstance, onRequestHookHandler } from "fastify";
+import { UserAuthenticate } from "../domains/auth/entities";
 
 
 export interface AppServer extends FastifyInstance {
 
-}
-
-export interface UserAuthenticate {
-    userId: string;
 }
 
 declare module 'fastify' {

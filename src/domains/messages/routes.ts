@@ -4,7 +4,7 @@ import { AppError } from "../../common/errors/app-error";
 
 export default function (fastify: FastifyInstance) {
 
-    fastify.get('/messeges/status', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+    fastify.get('/messages/status', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
 
         const { messagingFactory, user } = request.diScope.cradle;
 
@@ -20,7 +20,7 @@ export default function (fastify: FastifyInstance) {
         }];
     });
 
-    fastify.post('/messeges/init', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+    fastify.post('/messages/init', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
 
         const { messagingFactory, user } = request.diScope.cradle;
 
@@ -30,7 +30,7 @@ export default function (fastify: FastifyInstance) {
         reply.status(204);
     });
 
-    fastify.get('/messeges/qrcode', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+    fastify.get('/messages/qrcode', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
 
         const { messagingFactory, user } = request.diScope.cradle;
 

@@ -3,6 +3,7 @@ import jwt from "@fastify/jwt";
 import { AppConfig } from "../common/config";
 import { AppServer } from "./base";
 import { AppError } from "../common/errors/app-error";
+import { UserAuthenticate } from "../domains/auth/entities";
 
 export default function registerPlugins(app: AppServer, config: AppConfig) {
 
@@ -14,7 +15,7 @@ export default function registerPlugins(app: AppServer, config: AppConfig) {
 
             const  { user } = request.diScope.cradle;
             user.isAuthenticated = true;
-            user.accountId = request.user.accountId;
+            user.accountId = (request.user as UserAuthenticate).accountId;
         }
 
         done();

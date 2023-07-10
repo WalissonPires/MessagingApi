@@ -22,8 +22,7 @@ export default function (fastify: FastifyInstance) {
 
     fastify.post('/messeges/init', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
 
-        const { messagingFactory } = request.diScope.cradle;
-        const { user } = request;
+        const { messagingFactory, user } = request.diScope.cradle;
 
         const service = messagingFactory.getService({ clientId: 'account-' + user.accountId });
         await service.initialize();

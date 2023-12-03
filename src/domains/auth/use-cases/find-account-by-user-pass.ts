@@ -30,11 +30,11 @@ export class FindAccountByUserPass implements UseCase<FindAccountByUserPassInput
 
 }
 
-export class FindAccountByUserPassInput {
+export interface FindAccountByUserPassInput {
     username: string;
     password: string;
 }
 
-export class FindAccountByUserPassResult {
+export interface FindAccountByUserPassResult {
     accountId: number;
 }

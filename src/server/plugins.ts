@@ -1,3 +1,4 @@
+import { FastifyReply, FastifyRequest } from "fastify";
 import { fastifyAwilixPlugin } from "@fastify/awilix";
 import jwt from "@fastify/jwt";
 import { AppConfig } from "../common/config";
@@ -26,18 +27,22 @@ export default function registerPlugins(app: AppServer, config: AppConfig) {
 
 function registerAuth(app: AppServer, config: AppConfig) {
 
+    const jwtSecret = config.jwtSecret();
+    if (!jwtSecret)
+        throw new AppError('JWT Secret is not configured');
+
     app.register(jwt, {
-        secret: config.jwtSecret()
+        secret: jwtSecret
     });
 
-    app.decorate("authenticate", async (request, reply) => {
+    app.decorate("authenticate", async (request: FastifyRequest, reply: FastifyReply) => {
 
         try {
             await request.jwtVerify();
         }
         catch (error) {
 
-            const message: string = error.message ?? '';
+            const message: string = AppError.parse(error).message ?? '';
 
             if (message.startsWith('Authorization token is invalid') || message.startsWith('No Authorization was found'))
                 error = new AppError('Authorization token is invalid');

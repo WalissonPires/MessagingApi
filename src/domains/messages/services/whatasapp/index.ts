@@ -7,8 +7,8 @@ import { IWhatsAppService, QrCodeResult } from "./base";
 export class WhatsAppService implements IWhatsAppService {
 
     private _options: WhatsAppServiceOptions;
-    private _client: Client;
-    private _meta: Omit<ClientMeta, 'client'>;
+    private _client!: Client;
+    private _meta!: Omit<ClientMeta, 'client'>;
 
     constructor(options: WhatsAppServiceOptions) {
 
@@ -41,7 +41,7 @@ export class WhatsAppService implements IWhatsAppService {
     public async getQrCode(): Promise<QrCodeResult> {
 
         return {
-            qrCodeContent: this._meta.lastQrCode
+            qrCodeContent: this._meta.lastQrCode ?? ''
         };
     }
 
@@ -83,7 +83,7 @@ export class WhatsAppService implements IWhatsAppService {
                 headless: process.env.PUPPERTER_HEADLESS != 'false',
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             },
-            webVersion: "2.2325.3"
+            //webVersion: "2.2325.3" // Essa versão rodando o chrome da o erro: Código de erro: Out of Memory
         });
 
         this._client.on('qr', (qr) => {
@@ -97,8 +97,8 @@ export class WhatsAppService implements IWhatsAppService {
 
         this._client.on('authenticated', () => {
 
-            this._meta.lastError = null;
-            this._meta.lastQrCode = null;
+            this._meta.lastError = undefined;
+            this._meta.lastQrCode = undefined;
             this.saveClientMeta();
 
             console.log('[WhatsAppService] Authenticated');
@@ -109,7 +109,7 @@ export class WhatsAppService implements IWhatsAppService {
             console.log('[WhatsAppService] Authenticate Fail');
 
             this._meta.lastError = msg;
-            this._meta.lastQrCode = null;
+            this._meta.lastQrCode = undefined;
             this._meta.status = Status.Error;
             this.saveClientMeta();
         });

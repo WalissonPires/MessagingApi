@@ -2,7 +2,7 @@
 
 export class AppConfig {
 
-    public jwtSecret(): string {
+    public jwtSecret() {
 
         return this.getConfig('JWT_SECRET');
     }

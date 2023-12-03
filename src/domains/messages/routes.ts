@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { IWhatsAppServiceUtils } from "./services/whatasapp/base";
 import { AppError } from "../../common/errors/app-error";
+import { Status } from "./services/messaging";
 
 export default function (fastify: FastifyInstance) {
 
@@ -11,13 +12,22 @@ export default function (fastify: FastifyInstance) {
         const service = messagingFactory.getService({ clientId: 'account-' + user.accountId });
         const result = await service.getState();
 
-        return [{
+        const serviceStatus: ServiceStatus = {
             id: 1,
             name: 'whatsapp for <number>',
             type: 'whatsapp',
             status: result.status,
             message: result.message
-        }];
+        };
+
+        if (result.status === Status.WaitQrCodeRead && IWhatsAppServiceUtils.IsWPService(service)) {
+
+            const { qrCodeContent } = await service.getQrCode();
+            serviceStatus.qrCodeContent = qrCodeContent;
+        }
+
+
+        return [ serviceStatus ];
     });
 
     fastify.post('/messages/init', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
@@ -60,4 +70,13 @@ export default function (fastify: FastifyInstance) {
 interface PostMessageModel {
     to: string;
     content: string;
+}
+
+interface ServiceStatus {
+    id: number;
+    name: string;
+    type: string;
+    status: Status;
+    message?: string;
+    qrCodeContent?: string;
 }

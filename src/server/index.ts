@@ -8,7 +8,7 @@ import registerPlugins from "./plugins";
 
 export class Server {
 
-    private _app: AppServer;
+    private _app!: AppServer;
 
     constructor() {
 
@@ -51,13 +51,14 @@ export class Server {
         if (AppError.isThisType(error)) {
 
             reply.status(422).send({
-                message: error.message
+                message: error.message,
+                details: error.details ?? undefined
             });
 
             return;
         }
 
-        this._app.log.error(error);
+        console.error(error);
 
         reply.status(500).send({
             message: 'Internal Server Error'

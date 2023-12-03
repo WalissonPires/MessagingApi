@@ -17,4 +17,20 @@ model Account {
   password  String   @db.VarChar(60)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  providers Provider[]
+}
+
+model Provider {
+  id        Int      @id @default(autoincrement())
+  type      String   @db.VarChar(30)
+  name      String   @db.VarChar(30)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status    String   @db.VarChar(20)
+  config    String?   @db.VarChar(5000)
+  state     String?
+
+  accountId Int
+  account   Account @relation(fields: [accountId], references: [id])
 }

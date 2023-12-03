@@ -8,7 +8,7 @@ import { Server } from "./server";
         await server.listen();
     }
     catch(error) {
-        console.error(error.message);
+        console.error((error as any)?.message);
         process.exit(1);
     }
 

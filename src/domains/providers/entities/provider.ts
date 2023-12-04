@@ -51,7 +51,7 @@ export enum ProviderStatus {
     Initializing = 'initializing',
     Ready = 'ready',
     Error = 'error',
-    ReadQRCode = 'read-qrcode'
+    AuthQRCode = 'auth-qrcode'
 }
 
 export interface IProviderConfig { }

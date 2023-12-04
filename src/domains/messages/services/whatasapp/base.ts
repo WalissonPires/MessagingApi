@@ -1,18 +1,6 @@
-import { MessegingService } from "../messaging";
+import { MessegingService, MessegingServiceAuthQrCode } from "../messaging";
 
 
-export interface IWhatsAppService extends MessegingService {
+export interface IWhatsAppService extends MessegingService, MessegingServiceAuthQrCode {
 
-    getQrCode(): Promise<QrCodeResult>;
-}
-
-export interface QrCodeResult {
-    qrCodeContent: string;
-}
-
-export class IWhatsAppServiceUtils {
-    public static IsWPService(service: MessegingService): service is IWhatsAppService {
-
-        return typeof (service as IWhatsAppService).getQrCode === 'function';
-    }
 }

@@ -33,4 +33,32 @@ export default function (fastify: FastifyInstance) {
 
         return result;
     });
+
+    fastify.get<{ Params: { providerId: string } }>('/providers/status/:providerId?', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+
+        let providerId: number | undefined = parseInt(request.params.providerId);
+        providerId = isFinite(providerId) ? providerId : undefined;
+
+        const { getProvidersStatus } = request.diScope.cradle;
+
+        const result = await getProvidersStatus.execute({
+            providerId
+        });
+
+        return result;
+    });
+
+    fastify.post<{ Params: { providerId: string } }>('/providers/:providerId/init', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+
+        let providerId = parseInt(request.params.providerId);
+        providerId = isFinite(providerId) ? providerId : 0;
+
+        const { initProvider } = request.diScope.cradle;
+
+        await initProvider.execute({
+            providerId
+        });
+
+        reply.status(204);
+    });
 }

@@ -1,8 +1,8 @@
 import { Client, LocalAuth } from "whatsapp-web.js";
 import WAWebJS = require("whatsapp-web.js");
-import { Message, Status, StatusResult } from "../messaging";
+import { Message, QrCodeResult, Status, StatusResult } from "../messaging";
 import { ClientMeta, WhatsAppClientsCtrl } from "./clients-ctrl";
-import { IWhatsAppService, QrCodeResult } from "./base";
+import { IWhatsAppService } from "./base";
 
 export class WhatsAppService implements IWhatsAppService {
 
@@ -35,6 +35,9 @@ export class WhatsAppService implements IWhatsAppService {
         if (state === WAWebJS.WAState.UNLAUNCHED) {
             console.log('[WhatsAppService] Execute initialize from state ' + state);
             this._client.initialize();
+
+            this._meta.status = Status.Initializing;
+            this.saveClientMeta();
         }
     }
 

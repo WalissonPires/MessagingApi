@@ -5,8 +5,16 @@ export interface MessegingService {
     initialize(): Promise<void>;
     getState(): Promise<StatusResult>;
     sendMessage: (message: Message) => Promise<void>;
-
 }
+
+export interface MessegingServiceAuthQrCode {
+    getQrCode(): Promise<QrCodeResult>;
+}
+
+export interface QrCodeResult {
+    qrCodeContent: string;
+}
+
 
 export interface Message {
     to: string;
@@ -28,4 +36,12 @@ export enum Status {
 export interface StatusResult {
     status: Status;
     message?: string;
+}
+
+export class MessegingServiceUtils {
+
+    public static IsAuthQrCode(service: unknown): service is MessegingServiceAuthQrCode {
+
+        return typeof (service as MessegingServiceAuthQrCode).getQrCode === 'function';
+    }
 }

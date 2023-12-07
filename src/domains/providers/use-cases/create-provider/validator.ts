@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ValidationResult, Validator } from "../../../../common/validation";
 import { ProviderType } from '../../entities/provider';
+import { ZodErrorMap } from '../../../../common/validation/zod';
 import { CreateProviderInput } from "./models";
 
 export class CreateProviderValidator implements Validator<CreateProviderInput> {
@@ -53,15 +54,7 @@ export class CreateProviderValidator implements Validator<CreateProviderInput> {
 
         return {
             success: false,
-            errors: zodResult.error.errors.reduce((result, error) => {
-
-                const prop = error.path.join('.');
-                result[prop] ||= [];
-                result[prop].push(error.message);
-
-                return result;
-
-            }, {} as Record<string, string[]>)
-        }
+            errors: ZodErrorMap.map(zodResult.error)
+        };
     }
 }

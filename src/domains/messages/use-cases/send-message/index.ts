@@ -2,10 +2,10 @@ import { AppError } from "../../../../common/errors/app-error";
 import { UseCase } from "../../../../common/use-cases";
 import { ProviderServices } from "../../../providers/di-register";
 import { FindProviders } from "../../../providers/queries/find-providers";
-import { ProviderStatusUtils } from "../../../providers/utils/ProviderStatusUtils";
 import { MessagesServices } from "../../di-register";
 import { Status } from "../../services/messaging";
 import { MessagingFactory } from "../../services/messaging/factory";
+import { SendMessageValidator } from "./validator";
 
 
 export class SendMessage implements UseCase<SendMessageInput, SendMessageStatus[]> {
@@ -21,8 +21,14 @@ export class SendMessage implements UseCase<SendMessageInput, SendMessageStatus[
 
     public async execute(input: SendMessageInput): Promise<SendMessageStatus[]> {
 
+        input = this.validate(input);
+
         const result: SendMessageStatus[] = [];
-        const providers = await this._findProviders.execute({});
+        let providers = await this._findProviders.execute({});
+
+        if (input.providers?.length! > 0) {
+            providers = providers.filter(provider => input.providers!.some(x => x.id === provider.id));
+        }
 
         for(const provider of providers) {
 
@@ -58,12 +64,24 @@ export class SendMessage implements UseCase<SendMessageInput, SendMessageStatus[
         return result;
     }
 
+    private validate(input: SendMessageInput) {
+
+        const result = new SendMessageValidator().validate(input);
+
+        if (!result.success)
+            throw new AppError(AppError.InvalidFieldsMessage, result.errors);
+
+        return result.data!;
+    }
 }
 
 export interface SendMessageInput {
 
     to: string;
     content: string;
+    providers?: {
+        id: number;
+    }[];
 }
 
 export interface SendMessageStatus {

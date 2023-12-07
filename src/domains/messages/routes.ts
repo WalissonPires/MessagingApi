@@ -5,11 +5,8 @@ export default function (fastify: FastifyInstance) {
 
     fastify.post<{ Body: PostMessageModel }>('/messages', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
 
-        const { to, content } = request.body;
-
         const { sendMessage } = request.diScope.cradle;
-
-        const result = await sendMessage.execute({ to, content });
+        const result = await sendMessage.execute(request.body);
 
         return result;
     });

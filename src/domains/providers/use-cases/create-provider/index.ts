@@ -23,8 +23,6 @@ export class CreateProvider implements UseCase<CreateProviderInput, Provider> {
 
     public async execute(input: CreateProviderInput): Promise<Provider> {
 
-        console.log(input);
-
         input = this.validate(input);
 
         const provider = this.createProviderFromInput(input);

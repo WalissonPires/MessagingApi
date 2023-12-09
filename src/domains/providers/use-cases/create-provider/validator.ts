@@ -16,7 +16,7 @@ export class CreateProviderValidator implements Validator<CreateProviderInput> {
         const whatsappConfigSchema = {
             type: z.literal(ProviderType.Whatsapp),
             config: z.object({
-                phone: z.string().length(11)
+                //phone: z.string().length(11)
             })
         };
 

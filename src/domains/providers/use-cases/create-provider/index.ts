@@ -5,7 +5,6 @@ import { UserIdentity } from "@/domains/auth/entities";
 import { ProviderServices } from "../../di-register";
 import { Provider, ProviderStatus, ProviderType } from "../../entities/provider";
 import { ProvidersRepository } from "../../repositories/providers-repository";
-import { IWhatsAppProviderConfig, isIWhatsAppProviderConfig } from "../../entities/whatsapp-provider";
 import { CreateProviderValidator } from "./validator";
 import { CreateProviderInput } from "./models";
 import { IEmailProviderConfig, isIEmailProviderConfig } from "../../entities/email-provider";
@@ -61,15 +60,7 @@ export class CreateProvider implements UseCase<CreateProviderInput, Provider> {
 
             case ProviderType.Whatsapp:
 
-                if (!isIWhatsAppProviderConfig(input.provider.config))
-                    throw new AppError('invalid config');
-
-                const inputWAConfig = input.provider.config;
-                const waConfig: IWhatsAppProviderConfig = {
-                    phone: inputWAConfig.phone
-                };
-
-                provider.config = waConfig;
+                provider.config = {};
             break;
 
             case ProviderType.Email:

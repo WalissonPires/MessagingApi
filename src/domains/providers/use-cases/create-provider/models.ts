@@ -11,9 +11,7 @@ interface ProviderModel {
     config: ProviderWhatsAppConfigModel | ProviderEmailSmtpConfigModel;
 }
 
-interface ProviderWhatsAppConfigModel {
-    phone: string;
-}
+interface ProviderWhatsAppConfigModel {}
 
 interface ProviderEmailSmtpConfigModel {
     host: string;

@@ -9,6 +9,9 @@
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

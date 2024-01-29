@@ -1,0 +1,71 @@
+name: Deploy App
+
+on:
+  push:
+    branches: [ production ]
+
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.X'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Copy missing folders
+        run: |
+          cp -r ./package.json ./dist/
+          cp -r ./package-lock.json ./dist/
+          cp -r ./prisma ./dist/
+          cp -r ./node_modules ./dist/
+
+      - name: Zip App
+        run: zip -r ./app.zip ./dist
+
+#      - name: Show repo files
+#        run: ls -al .
+
+#      - name: Show output files
+#        run: ls -al ./.next/standalone
+
+      - name: Upload zip App to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          source: "./app.zip"
+          target: ${{ secrets.APP_PATH }}
+
+      - name: Run commands in server
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          APP_PATH: ${{ secrets.APP_PATH }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          envs: APP_PATH
+          script_stop: true
+          script: |
+            cd $APP_PATH
+            unzip -o app.zip
+            npx prisma db push --skip-generate
+            pm2 restart message-api

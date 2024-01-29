@@ -33,7 +33,7 @@ jobs:
 #          cp -r ./node_modules ./dist/
 
       - name: Zip App
-        run: zip -r ./app.zip ./dist
+        run: (cd dist; zip -r ../app.zip .)
 
 #      - name: Show repo files
 #        run: ls -al .

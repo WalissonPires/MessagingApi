@@ -30,7 +30,7 @@ jobs:
           cp -r ./package.json ./dist/
           cp -r ./package-lock.json ./dist/
           cp -r ./prisma ./dist/
-          cp -r ./node_modules ./dist/
+#          cp -r ./node_modules ./dist/
 
       - name: Zip App
         run: zip -r ./app.zip ./dist
@@ -67,5 +67,6 @@ jobs:
           script: |
             cd $APP_PATH
             unzip -o app.zip
+            npm ci --production
             npx prisma db push --skip-generate
             pm2 restart message-api

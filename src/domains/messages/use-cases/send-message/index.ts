@@ -37,8 +37,16 @@ export class SendMessage implements UseCase<SendMessageInput, SendMessageStatus[
 
                 const { status } = await service.getState();
 
-                if (status !== Status.Ready)
+                if (status !== Status.Ready) {
+
+                    result.push({
+                        providerId: provider.id,
+                        success: false,
+                        errorMessage: 'Provider is not ready'
+                    });
+
                     continue;
+                }
 
                 await service.sendMessage({
                     to: input.to,

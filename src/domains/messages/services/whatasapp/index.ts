@@ -50,7 +50,33 @@ export class WhatsAppService implements IWhatsAppService {
 
     public async sendMessage(message: Message): Promise<void> {
 
-        await this._client.sendMessage(message.to + '@c.us', message.content);
+        const mediasCount = message.medias?.length ?? 0;
+        const media = mediasCount == 1 ? message.medias?.at(0) : null;
+
+        if (message.content) {
+
+            await this._client.sendMessage(message.to + '@c.us', message.content, {
+                media: media ? new WAWebJS.MessageMedia(media.mimeType, media.fileBase64) : undefined
+            });
+        }
+        else if (media) {
+
+            await this._client.sendMessage(message.to + '@c.us', new WAWebJS.MessageMedia(media.mimeType, media.fileBase64), {
+                caption: media.label,
+                sendAudioAsVoice: true
+            });
+        }
+
+        if (message.medias && message.medias.length > 1) {
+
+            for(const media of message.medias) {
+
+                await this._client.sendMessage(message.to + '@c.us', new WAWebJS.MessageMedia(media.mimeType, media.fileBase64), {
+                    caption: media.label,
+                    sendAudioAsVoice: true
+                });
+            }
+        }
     }
 
     public async getState(): Promise<StatusResult> {

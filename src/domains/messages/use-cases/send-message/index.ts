@@ -50,7 +50,8 @@ export class SendMessage implements UseCase<SendMessageInput, SendMessageStatus[
 
                 await service.sendMessage({
                     to: input.to,
-                    content: input.content
+                    content: input.content,
+                    medias: input.medias
                 });
 
                 result.push({
@@ -87,6 +88,11 @@ export interface SendMessageInput {
 
     to: string;
     content: string;
+    medias?: {
+        mimeType: string;
+        fileBase64: string;
+        label?: string;
+    }[],
     providers?: {
         id: number;
     }[];

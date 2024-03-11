@@ -11,6 +11,11 @@ export class SendMessageValidator implements Validator<SendMessageInput> {
         const schema = z.object({
             to: z.string().max(60),
             content: z.string().max(1000),
+            medias: z.array(z.object({
+                mimeType: z.string().max(20),
+                fileBase64: z.string().max(10_000),
+                label: z.string().max(100).optional()
+            })).optional(),
             providers: z.array(z.object({
                 id: z.number()
             })).optional()

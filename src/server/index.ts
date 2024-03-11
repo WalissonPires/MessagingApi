@@ -40,7 +40,7 @@ export class Server {
 
         this._app.setErrorHandler(this.handleError.bind(this));
 
-        this._app.get('/', () => ({ message: 'Is running v0.0.1' }));
+        this._app.get('/', () => ({ message: 'Is running ' + process.env.npm_package_version }));
 
         registerPlugins(this._app, config);
     }

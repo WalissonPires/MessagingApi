@@ -19,6 +19,13 @@ export interface QrCodeResult {
 export interface Message {
     to: string;
     content: string;
+    medias?: MessageMedia[];
+}
+
+export interface MessageMedia {
+    label?: string;
+    mimeType: string;
+    fileBase64: string;
 }
 
 export enum Status {

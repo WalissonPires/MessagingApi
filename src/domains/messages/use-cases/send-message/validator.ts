@@ -13,7 +13,7 @@ export class SendMessageValidator implements Validator<SendMessageInput> {
             content: z.string().max(1000),
             medias: z.array(z.object({
                 mimeType: z.string().max(20),
-                fileBase64: z.string().max(10_000),
+                fileBase64: z.string().max(5_000_000),
                 label: z.string().max(100).optional()
             })).optional(),
             providers: z.array(z.object({

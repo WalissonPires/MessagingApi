@@ -36,7 +36,7 @@ export class Server {
 
         this._app = Fastify({
             logger: config.enableFastifyLogger(),
-            bodyLimit: 1024 * 1024 * 2
+            bodyLimit: 1024 * 1024 * 50
         }) as any;
 
         this._app.setErrorHandler(this.handleError.bind(this));

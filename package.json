@@ -30,6 +30,7 @@
     "@fastify/awilix": "^3.1.0",
     "@fastify/cors": "^8.4.2",
     "@fastify/jwt": "^7.2.0",
+    "@fastify/multipart": "^8.1.0",
     "@prisma/client": "^5.0.0",
     "awilix": "^8.0.1",
     "dotenv": "^16.3.1",

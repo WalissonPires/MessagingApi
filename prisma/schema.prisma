@@ -19,6 +19,7 @@ model Account {
   updatedAt DateTime @updatedAt
 
   providers Provider[]
+  files     AccountFile[]
 }
 
 model Provider {
@@ -28,9 +29,29 @@ model Provider {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   status    String   @db.VarChar(20)
-  config    String?   @db.VarChar(5000)
+  config    String?  @db.VarChar(5000)
   state     String?
 
   accountId Int
   account   Account @relation(fields: [accountId], references: [id])
+}
+
+model File {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(100)
+  mimeType String @db.VarChar(50)
+  hash     String @db.VarChar(32)
+  size     Int
+  data     Bytes
+
+  accounts AccountFile[]
+}
+
+model AccountFile {
+  accountId Int
+  fileId    Int
+  account   Account @relation(fields: [accountId], references: [id])
+  file      File    @relation(fields: [fileId], references: [id])
+
+  @@id([accountId, fileId])
 }

@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { fastifyAwilixPlugin } from "@fastify/awilix";
 import jwt from "@fastify/jwt";
 import cors from '@fastify/cors';
+import multpart from '@fastify/multipart';
 import { AppConfig } from "../common/config";
 import { AppServer } from "./base";
 import { AppError } from "../common/errors/app-error";
@@ -14,6 +15,8 @@ export default function registerPlugins(app: AppServer, config: AppConfig) {
     });
 
     app.register(fastifyAwilixPlugin, { disposeOnClose: true, disposeOnResponse: true });
+
+    app.register(multpart);
 
     app.addHook('preHandler', (request, reply, done) => {
 

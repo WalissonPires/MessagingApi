@@ -5,6 +5,7 @@ import { ProvidersPrismaRepository } from "./repositories/providers-prisma-repos
 import { ProvidersRepository } from "./repositories/providers-repository";
 import { CreateProvider } from "./use-cases/create-provider";
 import { InitProvider } from "./use-cases/init-provider";
+import { FinalizeProvider } from "./use-cases/finalize-provider";
 import { GetProvidersStatus } from "./use-cases/providers-status";
 
 
@@ -15,6 +16,7 @@ export default function diRegister() {
     DIContainer.addScoped(FindProviders, "findProviders");
     DIContainer.addScoped(CreateProvider, 'createProvider');
     DIContainer.addScoped(InitProvider, 'initProvider');
+    DIContainer.addScoped(FinalizeProvider, 'finalizeProvider');
     DIContainer.addScoped(GetProvidersStatus, 'getProvidersStatus');
 }
 
@@ -26,5 +28,6 @@ export interface ProviderServices {
 
     createProvider: CreateProvider;
     initProvider: InitProvider;
+    finalizeProvider: FinalizeProvider;
     getProvidersStatus: GetProvidersStatus;
 }

@@ -61,4 +61,18 @@ export default function (fastify: FastifyInstance) {
 
         reply.status(204);
     });
+
+    fastify.post<{ Params: { providerId: string } }>('/providers/:providerId/finalize', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+
+        let providerId = parseInt(request.params.providerId);
+        providerId = isFinite(providerId) ? providerId : 0;
+
+        const { finalizeProvider } = request.diScope.cradle;
+
+        await finalizeProvider.execute({
+            providerId
+        });
+
+        reply.status(204);
+    });
 }

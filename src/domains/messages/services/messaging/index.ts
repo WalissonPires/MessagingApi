@@ -3,6 +3,7 @@
 export interface MessegingService {
 
     initialize(): Promise<void>;
+    finalize(): Promise<void>;
     getState(): Promise<StatusResult>;
     sendMessage: (message: Message) => Promise<void>;
 }

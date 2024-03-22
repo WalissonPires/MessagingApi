@@ -7,7 +7,7 @@ import { ProviderServices } from "../../di-register";
 import { GetProviderById } from "../../queries/get-provider-by-id";
 
 
-export class InitProvider implements UseCase<InitProviderInput, void> {
+export class FinalizeProvider implements UseCase<FinalizeProviderInput, void> {
 
     private _getProviderById: GetProviderById;
     private _messagingFactory: MessagingFactory;
@@ -18,7 +18,7 @@ export class InitProvider implements UseCase<InitProviderInput, void> {
         this._getProviderById = getProviderById;
     }
 
-    public async execute(input: InitProviderInput): Promise<void> {
+    public async execute(input: FinalizeProviderInput): Promise<void> {
 
         const provider = await this._getProviderById.execute({
             providerId: input.providerId
@@ -33,14 +33,14 @@ export class InitProvider implements UseCase<InitProviderInput, void> {
         });
 
         const { status } = await service.getState();
-        if (status !== Status.Uninitialized)
+        if (status === Status.None)
             return;
 
-        await service.initialize();
+        await service.finalize();
     }
 
 }
 
-export interface InitProviderInput {
+export interface FinalizeProviderInput {
     providerId: number;
 }

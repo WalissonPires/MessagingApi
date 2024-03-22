@@ -41,6 +41,37 @@ export class WhatsAppService implements IWhatsAppService {
         }
     }
 
+    public async finalize(): Promise<void> {
+
+        let state = WAWebJS.WAState.UNLAUNCHED;
+
+        try {
+            state =  await this._client.getState();
+        }
+        catch(error) {
+            // console.error(error);
+
+            /* errors
+            - TypeError: Cannot read properties of null (reading 'evaluate'). this._client.pupPage is null (First call)
+            - Session closed. Most likely the page has been closed (After disconnect whatsapp)
+            */
+        }
+
+        if (state !== WAWebJS.WAState.CONNECTED)
+            return;
+
+        try {
+            await this._client.logout();
+            //await this._client.destroy();
+        }
+        catch(error) {
+            //console.error(error);
+        }
+
+        this._meta.status = Status.Uninitialized;
+        this.saveClientMeta();
+    }
+
     public async getQrCode(): Promise<QrCodeResult> {
 
         return {
@@ -53,17 +84,19 @@ export class WhatsAppService implements IWhatsAppService {
         const mediasCount = message.medias?.length ?? 0;
         const media = mediasCount == 1 ? message.medias?.at(0) : null;
 
+        const destination = message.to + '@c.us';
+
         if (message.content) {
 
-            await this._client.sendMessage(message.to + '@c.us', message.content, {
+            await this._client.sendMessage(destination, message.content, {
                 media: media ? new WAWebJS.MessageMedia(media.mimeType, media.fileBase64) : undefined
             });
         }
         else if (media) {
 
-            await this._client.sendMessage(message.to + '@c.us', new WAWebJS.MessageMedia(media.mimeType, media.fileBase64), {
+            await this._client.sendMessage(destination, new WAWebJS.MessageMedia(media.mimeType, media.fileBase64), {
                 caption: media.label,
-                sendAudioAsVoice: true
+                sendAudioAsVoice: false
             });
         }
 
@@ -71,9 +104,9 @@ export class WhatsAppService implements IWhatsAppService {
 
             for(const media of message.medias) {
 
-                await this._client.sendMessage(message.to + '@c.us', new WAWebJS.MessageMedia(media.mimeType, media.fileBase64), {
+                await this._client.sendMessage(destination, new WAWebJS.MessageMedia(media.mimeType, media.fileBase64), {
                     caption: media.label,
-                    sendAudioAsVoice: true
+                    sendAudioAsVoice: false
                 });
             }
         }

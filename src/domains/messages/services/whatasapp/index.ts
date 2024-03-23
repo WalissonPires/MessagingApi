@@ -142,6 +142,7 @@ export class WhatsAppService implements IWhatsAppService {
         this._client = new Client({
             authStrategy: new LocalAuth({ clientId: this._options.clientId }), //new RemoteAuth({ clientId: options.clientId, store: new Storage(), backupSyncIntervalMs: 1000 * 60 }),
             puppeteer: {
+                executablePath: process.env.BROWSER_PATH,
                 headless: process.env.PUPPERTER_HEADLESS != 'false',
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             },

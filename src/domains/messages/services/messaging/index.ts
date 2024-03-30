@@ -6,6 +6,7 @@ export interface MessegingService {
     finalize(): Promise<void>;
     getState(): Promise<StatusResult>;
     sendMessage: (message: Message) => Promise<void>;
+    addListenerMessageReceived: (handler: MessageReceivedHandler) => void;
 }
 
 export interface MessegingServiceAuthQrCode {
@@ -27,6 +28,21 @@ export interface MessageMedia {
     label?: string;
     mimeType: string;
     fileBase64: string;
+}
+
+
+export interface MessageReceivedHandler {
+    (context: MessageReceivedContext): Promise<void>;
+}
+
+export interface MessageReceivedContext {
+    message: MessageReceived;
+    providerId: number;
+}
+
+export interface MessageReceived {
+    from: string;
+    content: string;
 }
 
 export enum Status {

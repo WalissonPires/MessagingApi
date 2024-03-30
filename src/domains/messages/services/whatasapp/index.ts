@@ -1,6 +1,6 @@
 import { Client, LocalAuth } from "whatsapp-web.js";
 import WAWebJS = require("whatsapp-web.js");
-import { Message, QrCodeResult, Status, StatusResult } from "../messaging";
+import { Message, MessageReceivedHandler, QrCodeResult, Status, StatusResult } from "../messaging";
 import { ClientMeta, WhatsAppClientsCtrl } from "./clients-ctrl";
 import { IWhatsAppService } from "./base";
 
@@ -118,6 +118,25 @@ export class WhatsAppService implements IWhatsAppService {
             status: this._meta.status,
             message: this._meta.status === Status.Error ? this._meta.lastError : undefined,
         };
+    }
+
+    public addListenerMessageReceived(handler: MessageReceivedHandler) {
+
+        this._client.on('message', async (message) => {
+
+            if (message.from.startsWith(this._client.info.wid.user) || message.from === 'status@broadcast')
+                return;
+
+            const from = message.from.substring(0, message.from.indexOf('@'));
+
+            handler({
+                providerId: parseInt(this._meta.clientId.replace('provider-', '')),
+                message: {
+                    from,
+                    content: message.body
+                }
+            });
+        });
     }
 
 

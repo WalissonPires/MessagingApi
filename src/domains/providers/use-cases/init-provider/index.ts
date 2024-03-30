@@ -3,6 +3,7 @@ import { UseCase } from "../../../../common/use-cases";
 import { MessagesServices } from "../../../messages/di-register";
 import { Status } from "../../../messages/services/messaging";
 import { MessagingFactory } from "../../../messages/services/messaging/factory";
+import { Chatbot } from "../../../messages/use-cases/chatbot";
 import { ProviderServices } from "../../di-register";
 import { GetProviderById } from "../../queries/get-provider-by-id";
 
@@ -37,8 +38,9 @@ export class InitProvider implements UseCase<InitProviderInput, void> {
             return;
 
         await service.initialize();
-    }
 
+        service.addListenerMessageReceived(Chatbot.handlerMessageReceived);
+    }
 }
 
 export interface InitProviderInput {

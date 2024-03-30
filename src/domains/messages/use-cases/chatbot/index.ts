@@ -47,10 +47,11 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
 
             const config = JSON.parse(provider.config);
             const chatbotRootNode = config?.chatbotMessages as ChatNode;
-            injectExitNode(chatbotRootNode, '^sair$', 'Obrigado pelo contato. Se precisar de qualquer coisa, estamos à disposição!');
 
             if (!chatbotRootNode)
                 return;
+
+            injectExitNode(chatbotRootNode, '^sair$', 'Obrigado pelo contato. Se precisar de qualquer coisa, estamos à disposição!');
 
             contactContext = {
                 accountId: provider.accountId,

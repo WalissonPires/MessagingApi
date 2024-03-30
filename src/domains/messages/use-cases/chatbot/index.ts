@@ -1,5 +1,5 @@
-import mime from "mime";
 import { existsSync, readFileSync } from "fs";
+import { lookup } from "mime-types";
 import { PrismaClient } from "@prisma/client";
 import { diContainer } from "@fastify/awilix";
 import { UseCase } from "../../../../common/use-cases";
@@ -98,7 +98,7 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
                     to: input.message.from,
                     content: '',
                     medias: [{
-                        mimeType: mime.getType(filename) ?? 'application/octet-stream',
+                        mimeType: lookup(filename) || 'application/octet-stream',
                         fileBase64: file.toString('base64')
                     }]
                 });

@@ -1,3 +1,5 @@
+import mime from "mime";
+import { existsSync, readFileSync } from "fs";
 import { PrismaClient } from "@prisma/client";
 import { diContainer } from "@fastify/awilix";
 import { UseCase } from "../../../../common/use-cases";
@@ -8,7 +10,6 @@ import { ChatBotStateMachine, ChatNode, injectExitNode } from "../../utils/chatb
 import { MessagingFactory } from "../../services/messaging/factory";
 import { MessagesServices } from "../../di-register";
 import { ProviderType } from "../../../providers/entities/provider";
-
 
 export class Chatbot implements UseCase<MessageReceivedContext, void> {
 
@@ -52,6 +53,7 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
                 return;
 
             contactContext = {
+                accountId: provider.accountId,
                 providerId: provider.id,
                 providerType: provider.type as ProviderType,
                 chatbot: new ChatBotStateMachine(chatbotRootNode, null),
@@ -84,13 +86,31 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
 
         for(const replyMsg of replyMsgs) {
 
-            await service.sendMessage({
-                to: input.message.from,
-                content: replyMsg
-            });
+            if (replyMsg.startsWith('file://')) {
+
+                const filename = replyMsg.replace('file://', '');
+                if (!existsSync(filename))
+                    continue;
+
+                const file = readFileSync(filename);
+
+                await service.sendMessage({
+                    to: input.message.from,
+                    content: '',
+                    medias: [{
+                        mimeType: mime.getType(filename) ?? 'application/octet-stream',
+                        fileBase64: file.toString('base64')
+                    }]
+                });
+            }
+            else {
+                await service.sendMessage({
+                    to: input.message.from,
+                    content: replyMsg
+                });
+            }
         }
     }
-
 
 
     private static _contactsChat: Record<string, ContactContext> = {};
@@ -101,9 +121,20 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
 
         await chatbot.execute(context);
     }
+
+    public static clearFromProvider(providerId: number) {
+
+        for(const key in this._contactsChat) {
+
+            const meta = this._contactsChat[key];
+            if (meta.providerId === providerId)
+                delete this._contactsChat[key];
+        }
+    }
 }
 
 interface ContactContext {
+    accountId: number;
     providerId: number;
     providerType: ProviderType;
     chatbot: ChatBotStateMachine;

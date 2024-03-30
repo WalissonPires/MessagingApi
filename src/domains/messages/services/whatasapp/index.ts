@@ -3,6 +3,7 @@ import WAWebJS = require("whatsapp-web.js");
 import { Message, MessageReceivedHandler, QrCodeResult, Status, StatusResult } from "../messaging";
 import { ClientMeta, WhatsAppClientsCtrl } from "./clients-ctrl";
 import { IWhatsAppService } from "./base";
+import { Chatbot } from "../../use-cases/chatbot";
 
 export class WhatsAppService implements IWhatsAppService {
 
@@ -69,6 +70,7 @@ export class WhatsAppService implements IWhatsAppService {
         }
 
         this._meta.status = Status.Uninitialized;
+        Chatbot.clearFromProvider(this.getProviderId());
         this.saveClientMeta();
     }
 
@@ -130,7 +132,7 @@ export class WhatsAppService implements IWhatsAppService {
             const from = message.from.substring(0, message.from.indexOf('@'));
 
             handler({
-                providerId: parseInt(this._meta.clientId.replace('provider-', '')),
+                providerId: this.getProviderId(),
                 message: {
                     from,
                     content: message.body
@@ -226,6 +228,11 @@ export class WhatsAppService implements IWhatsAppService {
             ...this._meta,
             client: this._client
         });
+    }
+
+    private getProviderId() {
+
+        return parseInt(this._meta.clientId.replace('provider-', ''));
     }
 }
 

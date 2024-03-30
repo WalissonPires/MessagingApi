@@ -37,7 +37,8 @@ export class ChatBotStateMachine {
     public next({ input }: ChatBotProcessInput): boolean {
 
         const node = this.getCurrentNode();
-        console.log({ node });
+        console.log('CurrentNodeId: ' + node?.id);
+
         if (node === null) {
             if (!new RegExp(this._rootNode.pattern, 'i').test(input)) return false;
 

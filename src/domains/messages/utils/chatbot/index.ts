@@ -9,6 +9,7 @@ export interface ChatNode {
     action?: {
         type: ChatNodeAction;
     }
+    delay?: number; // seconds
 }
 
 interface Output {
@@ -25,6 +26,10 @@ export interface ChatBotProcessInput {
     input: string;
 }
 
+export interface ChatbotProcessResult {
+    changed: boolean;
+}
+
 export class ChatBotStateMachine {
     private _rootNode: ChatNode;
     private _currentNodePath: string[];
@@ -34,16 +39,23 @@ export class ChatBotStateMachine {
         this._currentNodePath = currentNodeId ? [currentNodeId] : [];
     }
 
-    public next({ input }: ChatBotProcessInput): boolean {
+    public next({ input }: ChatBotProcessInput): ChatbotProcessResult {
 
         const node = this.getCurrentNode();
         console.log('CurrentNodeId: ' + node?.id);
 
         if (node === null) {
-            if (!new RegExp(this._rootNode.pattern, 'i').test(input)) return false;
+            if (!new RegExp(this._rootNode.pattern, 'i').test(input)) {
+                return {
+                    changed: false
+                };
+            }
 
             this._currentNodePath = [this._rootNode.id];
-            return true;
+
+            return {
+                changed: true
+            };
         }
 
         if (node.action) {
@@ -57,7 +69,9 @@ export class ChatBotStateMachine {
         const isLeafNode = node.childs.length === 0;
         if (isLeafNode) {
             this._currentNodePath = [];
-            return true;
+            return {
+                changed: true
+            };
         }
 
         for (const child of node.childs) {
@@ -65,10 +79,14 @@ export class ChatBotStateMachine {
             if (!isMatch) continue;
 
             this._currentNodePath.push(child.id);
-            return true;
+            return {
+                changed: true
+            };
         }
 
-        return false;
+        return {
+            changed: false
+        };
     }
 
     public previus() {
@@ -82,8 +100,11 @@ export class ChatBotStateMachine {
 
     public isEnded() {
         const node = this.getCurrentNode();
-        const isLeafNode = node?.childs.length === 0;
-        return isLeafNode;
+        if (!node) return false;
+
+        const isLeafNode = node.childs.length === 0;
+        const hasActionGoTo = node.action && node.action.type === ChatNodeAction.GoToPrevious;
+        return isLeafNode && !hasActionGoTo;
     }
 
     public reset() {

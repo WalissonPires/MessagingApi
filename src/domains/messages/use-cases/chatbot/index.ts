@@ -72,9 +72,21 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
         // if (status !== Status.Ready)
         //     return;
 
+        const previousState = chatbot.currentState();
+
+        if (previousState) {
+
+            if (previousState.delay && contactContext.lastMessage) {
+
+                const delayAt = new Date(contactContext.lastMessage?.getTime() + (1000 * previousState.delay));
+                if (delayAt > new Date())
+                    return;
+            }
+        }
+
         if (chatbot.isEnded()) chatbot.reset();
 
-        const stateChanged = chatbot.next({
+        const { changed } = chatbot.next({
             input: input.message.content
         });
 
@@ -83,7 +95,7 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
             return;
 
         contactContext.lastMessage = new Date();
-        const replyMsgs = stateChanged ? state.output : state.invalidOutput ?? [];
+        const replyMsgs = changed ? state.output : state.invalidOutput ?? [];
 
         for(const replyMsg of replyMsgs) {
 

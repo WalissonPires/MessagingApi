@@ -75,4 +75,18 @@ export default function (fastify: FastifyInstance) {
 
         reply.status(204);
     });
+
+    fastify.get<{ Params: { providerId: string } }>('/providers/:providerId/chatbot-flow', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+
+        let providerId = parseInt(request.params.providerId);
+        providerId = isFinite(providerId) ? providerId : 0;
+
+        const { getProviderChatbotFlow } = request.diScope.cradle;
+
+        const result = await getProviderChatbotFlow.execute({
+            providerId
+        });
+
+        return result;
+    });
 }

@@ -10,6 +10,7 @@ import { ChatBotStateMachine, ChatNode, injectExitNode } from "../../utils/chatb
 import { MessagingFactory } from "../../services/messaging/factory";
 import { MessagesServices } from "../../di-register";
 import { ProviderType } from "../../../providers/entities/provider";
+import { IProviderConfigChatbotFlow } from "./base";
 
 export class Chatbot implements UseCase<MessageReceivedContext, void> {
 
@@ -45,8 +46,8 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
             if (!provider.config)
                 return;
 
-            const config = JSON.parse(provider.config);
-            const chatbotRootNode = config?.chatbotMessages as ChatNode;
+            const config = JSON.parse(provider.config) as IProviderConfigChatbotFlow;
+            const chatbotRootNode = config?.chatbotMessages;
 
             if (!chatbotRootNode)
                 return;

@@ -7,6 +7,7 @@ import { CreateProvider } from "./use-cases/create-provider";
 import { InitProvider } from "./use-cases/init-provider";
 import { FinalizeProvider } from "./use-cases/finalize-provider";
 import { GetProvidersStatus } from "./use-cases/providers-status";
+import { GetProviderChatbotFlow } from "./use-cases/get-provider-chatbot-flow";
 
 
 export default function diRegister() {
@@ -18,6 +19,7 @@ export default function diRegister() {
     DIContainer.addScoped(InitProvider, 'initProvider');
     DIContainer.addScoped(FinalizeProvider, 'finalizeProvider');
     DIContainer.addScoped(GetProvidersStatus, 'getProvidersStatus');
+    DIContainer.addScoped(GetProviderChatbotFlow, 'getProviderChatbotFlow');
 }
 
 export interface ProviderServices {
@@ -30,4 +32,5 @@ export interface ProviderServices {
     initProvider: InitProvider;
     finalizeProvider: FinalizeProvider;
     getProvidersStatus: GetProvidersStatus;
+    getProviderChatbotFlow: GetProviderChatbotFlow;
 }

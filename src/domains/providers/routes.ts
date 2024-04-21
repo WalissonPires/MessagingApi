@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { CreateProviderInput } from "./use-cases/create-provider/models";
+import { UpdateProviderChatbotFlowInput } from "./use-cases/update-provider-chatbot-flow";
 
 export default function (fastify: FastifyInstance) {
 
@@ -88,5 +89,18 @@ export default function (fastify: FastifyInstance) {
         });
 
         return result;
+    });
+
+    fastify.put<{ Params: { providerId: string },  Body: UpdateProviderChatbotFlowInput }>('/providers/:providerId/chatbot-flow', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+
+        let providerId = parseInt(request.params.providerId);
+        providerId = isFinite(providerId) ? providerId : 0;
+        request.body.providerId = providerId;
+
+        const { updateProviderChatbotFlow } = request.diScope.cradle;
+
+        await updateProviderChatbotFlow.execute(request.body);
+
+        reply.status(204);
     });
 }

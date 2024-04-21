@@ -2,8 +2,8 @@ export interface ChatNode {
     id: string;
     label: string;
     pattern: string;
-    output: string[];
-    invalidOutput?: string[];
+    output: ChatNodeOutput[];
+    invalidOutput?: ChatNodeOutput[];
     childs: ChatNode[];
     delayChildren?: number; // Delay antes de selecionar o próximo estado. CasoUso: O bot pede para o cliente digitar algo. Só que o cliente enviar em varias mensagens. Para exibir que o bot responda na primeira mensagem esperar algum tempo
     action?: {
@@ -12,11 +12,16 @@ export interface ChatNode {
     delay?: number; // seconds
 }
 
-interface Output {
-    type: 'text' | 'local-file',
-    contentType: string;
+export interface ChatNodeOutput {
+    type: typeof ChatNodeOutputType[keyof typeof ChatNodeOutputType];
+    contentType?: string;
     content: string;
 }
+
+export const ChatNodeOutputType = {
+    text: 'text',
+    mediaLink:  'media-link'
+} as const;
 
 export enum ChatNodeAction {
     GoToPrevious = 1
@@ -134,7 +139,10 @@ export function injectExitNode(node: ChatNode, pattern: string, output: string) 
         id: 'default-exit-node',
         label: 'Exit',
         pattern,
-        output: [output],
+        output: [{
+            type: ChatNodeOutputType.text,
+            content: output
+        }],
         childs: [],
     };
 

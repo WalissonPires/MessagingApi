@@ -3,10 +3,10 @@ import { lookup } from "mime-types";
 import { PrismaClient } from "@prisma/client";
 import { diContainer } from "@fastify/awilix";
 import { UseCase } from "../../../../common/use-cases";
-import { MessageReceivedContext, Status } from "../../services/messaging";
+import { MessageReceivedContext, MimeTypeMdiaLink } from "../../services/messaging";
 import { DatabaseServices } from "../../../../database/di-register";
 import { AppError } from "../../../../common/errors/app-error";
-import { ChatBotStateMachine, ChatNode, injectExitNode } from "../../utils/chatbot";
+import { ChatBotStateMachine, ChatNode, ChatNodeOutput, ChatNodeOutputType, injectExitNode } from "../../utils/chatbot";
 import { MessagingFactory } from "../../services/messaging/factory";
 import { MessagesServices } from "../../di-register";
 import { ProviderType } from "../../../providers/entities/provider";
@@ -100,9 +100,9 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
 
         for(const replyMsg of replyMsgs) {
 
-            if (replyMsg.startsWith('file://')) {
+            if (replyMsg.content.startsWith('file://')) {
 
-                const filename = replyMsg.replace('file://', '');
+                const filename = replyMsg.content.replace('file://', '');
                 if (!existsSync(filename))
                     continue;
 
@@ -117,10 +117,21 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
                     }]
                 });
             }
+            else if (replyMsg.type === ChatNodeOutputType.mediaLink) {
+
+                await service.sendMessage({
+                    to: input.message.from,
+                    content: '',
+                    medias: [{
+                        mimeType: MimeTypeMdiaLink,
+                        fileBase64: replyMsg.content
+                    }]
+                });
+            }
             else {
                 await service.sendMessage({
                     to: input.message.from,
-                    content: replyMsg
+                    content: replyMsg.content
                 });
             }
         }

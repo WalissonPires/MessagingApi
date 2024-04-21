@@ -1,6 +1,6 @@
 import { Client, LocalAuth } from "whatsapp-web.js";
 import WAWebJS = require("whatsapp-web.js");
-import { Message, MessageReceivedHandler, QrCodeResult, Status, StatusResult } from "../messaging";
+import { Message, MessageMedia, MessageReceivedHandler, MimeTypeMdiaLink, QrCodeResult, Status, StatusResult } from "../messaging";
 import { ClientMeta, WhatsAppClientsCtrl } from "./clients-ctrl";
 import { IWhatsAppService } from "./base";
 import { Chatbot } from "../../use-cases/chatbot";
@@ -85,8 +85,17 @@ export class WhatsAppService implements IWhatsAppService {
 
         const mediasCount = message.medias?.length ?? 0;
         const media = mediasCount == 1 ? message.medias?.at(0) : null;
-
         const destination = message.to + '@c.us';
+
+        const sendMedia = async (media: MessageMedia) => {
+
+            const messageMedia = media.mimeType === MimeTypeMdiaLink ? await WAWebJS.MessageMedia.fromUrl(media.fileBase64) : new WAWebJS.MessageMedia(media.mimeType, media.fileBase64);
+
+            await this._client.sendMessage(destination, messageMedia, {
+                caption: media.label,
+                sendAudioAsVoice: false
+            });
+        }
 
         if (message.content) {
 
@@ -96,20 +105,14 @@ export class WhatsAppService implements IWhatsAppService {
         }
         else if (media) {
 
-            await this._client.sendMessage(destination, new WAWebJS.MessageMedia(media.mimeType, media.fileBase64), {
-                caption: media.label,
-                sendAudioAsVoice: false
-            });
+            await sendMedia(media);
         }
 
         if (message.medias && message.medias.length > 1) {
 
             for(const media of message.medias) {
 
-                await this._client.sendMessage(destination, new WAWebJS.MessageMedia(media.mimeType, media.fileBase64), {
-                    caption: media.label,
-                    sendAudioAsVoice: false
-                });
+                await sendMedia(media);
             }
         }
     }

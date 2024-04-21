@@ -32,4 +32,18 @@ export class ProvidersPrismaRepository implements ProvidersRepository {
         provider.id = result.id;
     }
 
+    public async update(provider: Provider): Promise<void> {
+
+        await this._db.provider.update({
+            where: {
+                id: provider.id
+            },
+            data: {
+                name: provider.name,
+                type: provider.type,
+                status: provider.status,
+                config: provider.config ? JSON.stringify(provider.config) : null,
+            }
+        });
+    }
 }

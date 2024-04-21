@@ -30,6 +30,7 @@ export interface MessageMedia {
     fileBase64: string;
 }
 
+export const MimeTypeMdiaLink = 'media-link' as const;
 
 export interface MessageReceivedHandler {
     (context: MessageReceivedContext): Promise<void>;

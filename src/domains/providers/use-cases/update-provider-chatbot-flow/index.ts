@@ -1,5 +1,6 @@
 import { AppError } from "../../../../common/errors/app-error";
 import { UseCase } from "../../../../common/use-cases";
+import { Chatbot } from "../../../messages/use-cases/chatbot";
 import { ChatNode } from "../../../messages/utils/chatbot";
 import { ProviderServices } from "../../di-register";
 import { GetProviderById } from "../../queries/get-provider-by-id";
@@ -34,6 +35,8 @@ export class UpdateProviderChatbotFlow implements UseCase<UpdateProviderChatbotF
         };
 
         await this._providersRepository.update(provider);
+
+        Chatbot.clearFromProvider(provider.id);
     }
 
     private validate(input: UpdateProviderChatbotFlowInput) {

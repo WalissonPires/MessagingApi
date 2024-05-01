@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { ValidationResult, Validator } from "../../../../common/validation";
 import { ZodErrorMap } from '../../../../common/validation/zod';
-import { ChatNodeAction, ChatNodeOutputType } from '../../../messages/utils/chatbot';
+import { ChatNodeAction, ChatNodeOutputType, ChatNodePatternType } from '../../../messages/utils/chatbot';
 import { UpdateProviderChatbotFlowInput } from '.';
 
 export class UpdateProviderChatbotFlowValidador implements Validator<UpdateProviderChatbotFlowInput> {
@@ -11,6 +11,7 @@ export class UpdateProviderChatbotFlowValidador implements Validator<UpdateProvi
         const nodeSchema = z.object({
             id: z.string(),
             label: z.string(),
+            patternType: z.nativeEnum(ChatNodePatternType),
             pattern: z.string(),
             invalidOutput:z.array(z.object({
                 type: z.union([ z.literal(ChatNodeOutputType.text), z.literal(ChatNodeOutputType.mediaLink) ]),

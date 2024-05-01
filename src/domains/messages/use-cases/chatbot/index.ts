@@ -6,7 +6,7 @@ import { UseCase } from "../../../../common/use-cases";
 import { MessageReceivedContext, MimeTypeMdiaLink } from "../../services/messaging";
 import { DatabaseServices } from "../../../../database/di-register";
 import { AppError } from "../../../../common/errors/app-error";
-import { ChatBotStateMachine, ChatNode, ChatNodeOutput, ChatNodeOutputType, injectExitNode } from "../../utils/chatbot";
+import { ChatBotStateMachine, ChatNode, ChatNodeOutput, ChatNodeOutputType, ChatNodePatternType, injectExitNode } from "../../utils/chatbot";
 import { MessagingFactory } from "../../services/messaging/factory";
 import { MessagesServices } from "../../di-register";
 import { ProviderType } from "../../../providers/entities/provider";
@@ -52,7 +52,7 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
             if (!chatbotRootNode)
                 return;
 
-            injectExitNode(chatbotRootNode, '^sair$', 'Obrigado pelo contato. Se precisar de qualquer coisa, estamos à disposição!');
+            injectExitNode(chatbotRootNode, ChatNodePatternType.Regex, '^sair$', 'Obrigado pelo contato. Se precisar de qualquer coisa, estamos à disposição!');
 
             contactContext = {
                 accountId: provider.accountId,

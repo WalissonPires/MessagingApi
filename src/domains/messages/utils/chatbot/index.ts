@@ -1,6 +1,7 @@
 export interface ChatNode {
     id: string;
     label: string;
+    patternType: ChatNodePatternType;
     pattern: string;
     output: ChatNodeOutput[];
     invalidOutput?: ChatNodeOutput[];
@@ -27,6 +28,14 @@ export enum ChatNodeAction {
     GoToPrevious = 1
 }
 
+export enum ChatNodePatternType {
+    StartsWith = 1,
+    EndsWith = 2,
+    Contains = 3,
+    Exact = 4,
+    Regex = 5
+};
+
 export interface ChatBotProcessInput {
     input: string;
 }
@@ -50,7 +59,8 @@ export class ChatBotStateMachine {
         console.log('CurrentNodeId: ' + node?.id);
 
         if (node === null) {
-            if (!new RegExp(this._rootNode.pattern, 'i').test(input)) {
+
+            if (!this.testPattern(this._rootNode.patternType, this._rootNode.pattern, input)) {
                 return {
                     changed: false
                 };
@@ -80,7 +90,7 @@ export class ChatBotStateMachine {
         }
 
         for (const child of node.childs) {
-            const isMatch = new RegExp(child.pattern, 'i').test(input);
+            const isMatch = this.testPattern(child.patternType, child.pattern, input);
             if (!isMatch) continue;
 
             this._currentNodePath.push(child.id);
@@ -132,12 +142,34 @@ export class ChatBotStateMachine {
 
         return node;
     }
+
+    private testPattern(patternType: ChatNodePatternType, pattern: string, input: string) {
+
+        if (patternType === ChatNodePatternType.Exact) {
+            return input.toLowerCase() === pattern.toLowerCase();
+        }
+
+        if (patternType === ChatNodePatternType.StartsWith) {
+            return input.toLowerCase().startsWith(pattern.toLowerCase());
+        }
+
+        if (patternType === ChatNodePatternType.EndsWith) {
+            return input.toLowerCase().endsWith(pattern.toLowerCase());
+        }
+
+        if (patternType === ChatNodePatternType.Contains) {
+            return input.toLowerCase().includes(pattern.toLowerCase());
+        }
+
+        return new RegExp(pattern, 'i').test(input);
+    }
 }
 
-export function injectExitNode(node: ChatNode, pattern: string, output: string) {
+export function injectExitNode(node: ChatNode, patternType: ChatNodePatternType, pattern: string, output: string) {
     const exitNode: ChatNode = {
         id: 'default-exit-node',
         label: 'Exit',
+        patternType,
         pattern,
         output: [{
             type: ChatNodeOutputType.text,

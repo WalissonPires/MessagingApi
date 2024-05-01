@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Provider" ALTER COLUMN "config" SET DATA TYPE VARCHAR(50000);

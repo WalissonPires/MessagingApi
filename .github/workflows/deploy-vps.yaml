@@ -1,8 +1,9 @@
 name: Deploy App
 
-on:
-  push:
-    branches: [ production ]
+on: workflow_dispatch
+#on:
+#  push:
+#    branches: [ production ]
 
 jobs:
 

@@ -1,0 +1,34 @@
+# For more details, read this: https://coolify.io/docs/github-actions
+name: Build and Deploy
+on:
+  push:
+    branches: ["production"]
+env:
+  REGISTRY: registry.dev.wprm.com.br
+  IMAGE_NAME: "massaging"
+
+jobs:
+  amd64:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to private docker registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASS  }}
+      - name: Build image and push to registry
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      - name: Deploy to Coolify
+        run: |
+         curl --request GET '${{ secrets.COOLIFY_WEBHOOK }}' --header 'Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}'

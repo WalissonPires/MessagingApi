@@ -5,7 +5,7 @@ on:
     branches: ["production"]
 env:
   REGISTRY: registry.dev.wprm.com.br
-  IMAGE_NAME: "massaging"
+  IMAGE_NAME: "messaging"
 
 jobs:
   amd64:

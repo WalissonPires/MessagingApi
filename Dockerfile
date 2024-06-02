@@ -1,7 +1,4 @@
-# syntax = docker/dockerfile:1
-
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=16.14.2
+ARG NODE_VERSION=20.14.0
 FROM node:${NODE_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Node.js"
@@ -17,8 +14,8 @@ ENV NODE_ENV=production
 FROM base as build
 
 # Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y python pkg-config build-essential
+#RUN apt-get update -qq && \
+#    apt-get install -y python pkg-config build-essential
 
 # Install node modules
 COPY --link package-lock.json package.json ./
@@ -68,7 +65,10 @@ RUN npm i puppeteer \
 USER pptruser
 
 # Copy built application
-COPY --from=build /app /app
+COPY --from=build /app/dist /app/dist
+COPY --from=build /app/prisma /app/prisma
+COPY --from=build /app/node_modules /app/node_modules
+COPY --from=build /app/package.json /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000

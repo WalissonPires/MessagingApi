@@ -39,6 +39,7 @@ export class InitProvider implements UseCase<InitProviderInput, void> {
 
         await service.initialize();
 
+        service.removeAllListenersMessageReceived();
         service.addListenerMessageReceived(Chatbot.handlerMessageReceived);
     }
 }

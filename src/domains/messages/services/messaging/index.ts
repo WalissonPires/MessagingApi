@@ -7,6 +7,7 @@ export interface MessegingService {
     getState(): Promise<StatusResult>;
     sendMessage: (message: Message) => Promise<void>;
     addListenerMessageReceived: (handler: MessageReceivedHandler) => void;
+    removeAllListenersMessageReceived(): void;
 }
 
 export interface MessegingServiceAuthQrCode {

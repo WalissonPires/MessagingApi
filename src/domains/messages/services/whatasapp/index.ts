@@ -125,6 +125,11 @@ export class WhatsAppService implements IWhatsAppService {
         };
     }
 
+    public removeAllListenersMessageReceived() {
+
+        this._client.removeAllListeners('message');
+    }
+
     public addListenerMessageReceived(handler: MessageReceivedHandler) {
 
         this._client.on('message', async (message) => {

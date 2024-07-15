@@ -73,14 +73,6 @@ export class ChatBotStateMachine {
             };
         }
 
-        if (node.action) {
-
-            if (node.action.type === ChatNodeAction.GoToPrevious) {
-                this._currentNodePath.pop();
-                return this.next({ input });
-            }
-        }
-
         const isLeafNode = node.childs.length === 0;
         if (isLeafNode) {
             this._currentNodePath = [];
@@ -94,6 +86,22 @@ export class ChatBotStateMachine {
             if (!isMatch) continue;
 
             this._currentNodePath.push(child.id);
+
+            const newNode  = this.getCurrentNode();
+
+            if (newNode && newNode.action) {
+
+                if (newNode.action.type === ChatNodeAction.GoToPrevious) {
+
+                    this._currentNodePath.pop(); // self back to parent
+                    this._currentNodePath.pop(); // parent back to previous
+
+                    return {
+                        changed: true
+                    }
+                }
+            }
+
             return {
                 changed: true
             };

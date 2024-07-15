@@ -3,7 +3,7 @@ import { lookup } from "mime-types";
 import { PrismaClient } from "@prisma/client";
 import { diContainer } from "@fastify/awilix";
 import { UseCase } from "../../../../common/use-cases";
-import { MessageReceivedContext, MimeTypeMdiaLink } from "../../services/messaging";
+import { MessageReceivedContext, MessegingService, MimeTypeMdiaLink } from "../../services/messaging";
 import { DatabaseServices } from "../../../../database/di-register";
 import { AppError } from "../../../../common/errors/app-error";
 import { ChatBotStateMachine, ChatNode, ChatNodeOutput, ChatNodeOutputType, ChatNodePatternType, injectExitNode } from "../../utils/chatbot";
@@ -139,8 +139,19 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
 
 
     private static _contactsChat: Record<string, ContactContext> = {};
+    private static _providersListerning: Record<number, boolean> = {};
 
-    public static async handlerMessageReceived(context: MessageReceivedContext) {
+    public static async registerProviderListerner(providerId: number, service: MessegingService) {
+
+        if (this._providersListerning[providerId])
+            return;
+
+        service.addListenerMessageReceived(Chatbot.handlerMessageReceived);
+
+        this._providersListerning[providerId] = true;
+    }
+
+    private static async handlerMessageReceived(context: MessageReceivedContext) {
 
         const { chatbot } = diContainer.cradle;
 

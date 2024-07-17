@@ -9,6 +9,7 @@ export interface ChatNode {
     delayChildren?: number; // Delay antes de selecionar o próximo estado. CasoUso: O bot pede para o cliente digitar algo. Só que o cliente enviar em varias mensagens. Para exibir que o bot responda na primeira mensagem esperar algum tempo
     action?: {
         type: ChatNodeAction;
+        params?: any;
     }
     delay?: number; // seconds
 }
@@ -25,7 +26,12 @@ export const ChatNodeOutputType = {
 } as const;
 
 export enum ChatNodeAction {
-    GoToPrevious = 1
+    GoToPrevious = 1,
+    GoToNode = 2
+}
+
+export interface GoToNodeParams {
+    nodeId: string;
 }
 
 export enum ChatNodePatternType {
@@ -100,6 +106,21 @@ export class ChatBotStateMachine {
                         changed: true
                     }
                 }
+
+                if (newNode.action.type === ChatNodeAction.GoToNode) {
+
+                    const params = newNode.action.params as GoToNodeParams | undefined;
+                    const nodeId = params?.nodeId;
+
+                    if (!nodeId)
+                        throw new Error('[GoToNode] Param NodeId is empty');
+
+                    this._currentNodePath = this.getNodePathFromNodeId(nodeId) ?? [];
+
+                    return {
+                        changed: true
+                    }
+                }
             }
 
             return {
@@ -126,7 +147,7 @@ export class ChatBotStateMachine {
         if (!node) return false;
 
         const isLeafNode = node.childs.length === 0;
-        const hasActionGoTo = node.action && node.action.type === ChatNodeAction.GoToPrevious;
+        const hasActionGoTo = node.action && (node.action.type === ChatNodeAction.GoToPrevious || node.action.type === ChatNodeAction.GoToNode);
         return isLeafNode && !hasActionGoTo;
     }
 
@@ -149,6 +170,26 @@ export class ChatBotStateMachine {
         }
 
         return node;
+    }
+
+    private getNodePathFromNodeId(nodeId: string) {
+
+        const find = (node: ChatNode, path: string[]): string[] | null => {
+
+            if (node.id === nodeId)
+                return path;
+
+            for(const child of node.childs) {
+
+                const newPath = find(child, [ ...path, child.id ]);
+                if (newPath)
+                    return newPath;
+            }
+
+            return null;
+        };
+
+        return find(this._rootNode, []);
     }
 
     private testPattern(patternType: ChatNodePatternType, pattern: string, input: string) {

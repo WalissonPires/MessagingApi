@@ -6,7 +6,7 @@ import { UseCase } from "../../../../common/use-cases";
 import { MessageReceivedContext, MessegingService, MimeTypeMdiaLink } from "../../services/messaging";
 import { DatabaseServices } from "../../../../database/di-register";
 import { AppError } from "../../../../common/errors/app-error";
-import { ChatBotStateMachine, ChatNode, ChatNodeOutput, ChatNodeOutputType, ChatNodePatternType, injectExitNode } from "../../utils/chatbot";
+import { ChatBotStateMachine, ChatNodeOutputType, ChatNodePatternType, injectExitNode } from "../../utils/chatbot";
 import { MessagingFactory } from "../../services/messaging/factory";
 import { MessagesServices } from "../../di-register";
 import { ProviderType } from "../../../providers/entities/provider";
@@ -48,9 +48,12 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
             if (!provider.config)
                 return;
 
-            const config = JSON.parse(provider.config) as IProviderConfigChatbotFlow;
-            const chatbotRootNode = config?.chatbotMessages;
+            const config = JSON.parse(provider.config) as IProviderConfigChatbotFlow ?? {};
 
+            if (!config.chatbotActive)
+                return;
+
+            const chatbotRootNode = config.chatbotMessages;
             if (!chatbotRootNode)
                 return;
 

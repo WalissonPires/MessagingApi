@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { CreateProviderInput } from "./use-cases/create-provider/models";
 import { UpdateProviderChatbotFlowInput } from "./use-cases/update-provider-chatbot-flow";
+import { UpdateChatbotStatusInput } from "./use-cases/update-chatbot-status";
 
 export default function (fastify: FastifyInstance) {
 
@@ -100,6 +101,33 @@ export default function (fastify: FastifyInstance) {
         const { updateProviderChatbotFlow } = request.diScope.cradle;
 
         await updateProviderChatbotFlow.execute(request.body);
+
+        reply.status(204);
+    });
+
+    fastify.get<{ Params: { providerId: string } }>('/providers/:providerId/chatbot-status', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+
+        let providerId = parseInt(request.params.providerId);
+        providerId = isFinite(providerId) ? providerId : 0;
+
+        const { getChatbotStatus } = request.diScope.cradle;
+
+        const result = await getChatbotStatus.execute({
+            providerId
+        });
+
+        return result;
+    });
+
+    fastify.put<{ Params: { providerId: string },  Body: UpdateChatbotStatusInput }>('/providers/:providerId/chatbot-status', { onRequest: [ fastify.authenticate ] }, async (request, reply) => {
+
+        let providerId = parseInt(request.params.providerId);
+        providerId = isFinite(providerId) ? providerId : 0;
+        request.body.providerId = providerId;
+
+        const { setChatbotStatus } = request.diScope.cradle;
+
+        await setChatbotStatus.execute(request.body);
 
         reply.status(204);
     });

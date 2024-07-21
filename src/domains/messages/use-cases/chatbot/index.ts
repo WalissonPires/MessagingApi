@@ -25,7 +25,9 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
 
     public async execute(input: MessageReceivedContext): Promise<void> {
 
-        let contactContext = Chatbot._contactsChat[input.message.from];
+        const contactChatKey = input.providerId + '_' + input.message.from;
+
+        let contactContext = Chatbot._contactsChat[contactChatKey];
         if (!contactContext) {
 
             const provider = await this._db.provider.findFirst({
@@ -62,7 +64,7 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
                 lastMessage: null
             };
 
-            Chatbot._contactsChat[input.message.from] = contactContext;
+            Chatbot._contactsChat[contactChatKey] = contactContext;
         }
 
         const { chatbot, providerId, providerType } = contactContext;

@@ -9,7 +9,7 @@ export interface ChatNode {
     delayChildren?: number; // Delay antes de selecionar o próximo estado. CasoUso: O bot pede para o cliente digitar algo. Só que o cliente enviar em varias mensagens. Para exibir que o bot responda na primeira mensagem esperar algum tempo
     action?: {
         type: ChatNodeAction;
-        params?: any;
+        params?: ChatNodeActionParams;
     }
     delay?: number; // seconds
 }
@@ -30,7 +30,11 @@ export enum ChatNodeAction {
     GoToNode = 2
 }
 
-export interface GoToNodeParams {
+export interface ChatNodeActionParams {
+    triggerAtStart: boolean;
+}
+
+export interface GoToNodeParams extends ChatNodeActionParams {
     nodeId: string;
 }
 
@@ -62,7 +66,6 @@ export class ChatBotStateMachine {
     public next({ input }: ChatBotProcessInput): ChatbotProcessResult {
 
         const node = this.getCurrentNode();
-        console.log('CurrentNodeId: ' + node?.id);
 
         if (node === null) {
 
@@ -77,6 +80,14 @@ export class ChatBotStateMachine {
             return {
                 changed: true
             };
+        }
+
+        if (node.action && node.action.params?.triggerAtStart === false) {
+
+            if (node.action.type === ChatNodeAction.GoToPrevious) {
+                this._currentNodePath.pop();
+                return this.next({ input });
+            }
         }
 
         const isLeafNode = node.childs.length === 0;
@@ -95,7 +106,7 @@ export class ChatBotStateMachine {
 
             const newNode  = this.getCurrentNode();
 
-            if (newNode && newNode.action) {
+            if (newNode && newNode.action && newNode.action.params?.triggerAtStart === true) {
 
                 if (newNode.action.type === ChatNodeAction.GoToPrevious) {
 

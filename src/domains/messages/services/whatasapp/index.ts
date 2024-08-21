@@ -87,6 +87,8 @@ export class WhatsAppService implements IWhatsAppService {
         const media = mediasCount == 1 ? message.medias?.at(0) : null;
         const destination = message.to + '@c.us';
 
+        console.log('Send message to ' + destination);
+
         const sendMedia = async (media: MessageMedia) => {
 
             const messageMedia = media.mimeType === MimeTypeMdiaLink ? await WAWebJS.MessageMedia.fromUrl(media.fileBase64) : new WAWebJS.MessageMedia(media.mimeType, media.fileBase64);

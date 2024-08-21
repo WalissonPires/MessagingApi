@@ -141,6 +141,10 @@ export class WhatsAppService implements IWhatsAppService {
 
             const from = message.from.substring(0, message.from.indexOf('@'));
 
+            // skip number format 553391044866-1570709760
+            if (from.indexOf('-') >= 0)
+                return;
+
             handler({
                 providerId: this.getProviderId(),
                 message: {

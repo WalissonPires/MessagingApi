@@ -23,7 +23,7 @@ export class SaveFile implements UseCase<SaveFileInput, FileMetaView1> {
 
     public async execute(input: SaveFileInput): Promise<FileMetaView1> {
 
-        const fileHash = Hash.generate(input.fileMeta.data);
+        const fileHash = Hash.generateMd5(input.fileMeta.data);
 
         let fileMeta = await this._getFileByHash.execute({ fileHash });
 

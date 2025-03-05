@@ -1,3 +1,4 @@
+import { Hash } from "@/common/crypto/hash";
 import { UseCase } from "../../../common/use-cases";
 import { DatabaseServices } from "../../../database/di-register";
 
@@ -13,10 +14,12 @@ export class FindAccountByUserPass implements UseCase<FindAccountByUserPassInput
 
     public async execute(input: FindAccountByUserPassInput): Promise<FindAccountByUserPassResult | null> {
 
+        const passwordHash = Hash.generateSha256(input.password);
+
         const account = await this._db.account.findFirst({
             where: {
                 username: input.username,
-                password: input.password
+                password: passwordHash
             }
         });
 

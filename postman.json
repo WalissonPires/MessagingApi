@@ -1,0 +1,700 @@
+{
+	"info": {
+		"_postman_id": "530e8bd7-c6d2-47ff-a3f6-1a7bac2f8213",
+		"name": "MessegingApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9335962"
+	},
+	"item": [
+		{
+			"name": "Providers",
+			"item": [
+				{
+					"name": "CreateProvider",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"provider\": {\r\n        \"name\": \"test\",\r\n        \"type\": \"whatsapp\",\r\n        \"config\": {}\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProviderById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InitProvider",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers/1/init",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"1",
+								"init"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FinalizeProvider",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers/1/finalize",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"1",
+								"finalize"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FindProviders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers?name=wha",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "wha"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProvidersStatus",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProviderStatusById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers/status/16",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"status",
+								"16"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "SendMessage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"5533900110011\",\r\n    \"content\": \"I'm 🤖\",\r\n    \"providers\": [{\r\n        \"id\": 1\r\n    }]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SendMessageMedia",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"5533900110011\",\r\n    \"content\": \"I'm 🤖\",\r\n    \"medias\": [{\r\n        \"mimeType\": \"image/png\",\r\n        \"fileBase64\": \"R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=\",\r\n        \"label\": \"minha imagem\"\r\n    }, {\r\n        \"mimeType\": \"audio/mpeg\",\r\n        \"fileBase64\": \"SUQzBAAAAAAAS1REUkMAAAAMAAADMjAwOC0wOS0yMQBUWFhYAAAACAAAA0lFTkcAIABUU1NFAAAADwAAA0xhdmY1OC43Ni4xMDAAAAAAAAAAAAAAAP/zWMAAAAAAAAAAAABYaW5nAAAADwAAAAgAAAhwADc3Nzc3Nzc3Nzc3N1lZWVlZWVlZWVlZWXd3d3d3d3d3d3d3d3eVlZWVlZWVlZWVlZWurq6urq6urq6urq6u2dnZ2dnZ2dnZ2dnZ+/v7+/v7+/v7+/v7+////////////////wAAAABMYXZjNTguMTMAAAAAAAAAAAAAAAAkBBIAAAAAAAAIcNAl1AgAAAAAAAAAAAAAAP/ziMQADoBWvLdDAACCQCVO/ET3dETcDAxcAwMWOBAaCDgfeXeIHeGCjvKAhw//g+fUD7///B/lDn/4IO//xBBD/D/Lv/wfAAFUE6JmN0OFepieSZbEqXyYkWnaEaDW+wXUTzbEJRi4pmWRnSCVq5m6PcdGMbcguxfzkrFW9ApzAlchMYDLIGZVLmGMhgNnLNXsaPDbqOq/0dhl0WENfVhZCnLGrCvoDiV50qGBIBbqsaQsCa9CpdSQ6xFtodkjv2qeHK8cl0A3nZrS2JwRBMM/L59nEPQVF6ehrUnHKpnquyyzFXefl/KegfqPyqvNbqa7E5qpPUucmn6Gfuzz1dpOapquM9Qu7Uj8xKtU1mXx+zJK9Jqdoo/KInFopWsy+v/ziMTZSlwOzx+awAX/LIxR2a9SGZR2nq1LVNYj0qlOEtpr9FbvUM5d1PzeM5D9HjU1T4U1Jeq39Z3N40kpp6utSqXS2pQUsAW6XeH5Y01nCrV4/tmxrKS1a+VPg2oAJS/b7fWOTxkdBnUig0GBmr+OW1awyqB6jJdWnCftrqw2cRljzRaQdmhFMXPVDqTVhSGBk0WjtIdEIfhyLbq66I+MxicrfxWkJys4JBbWH7C5cjItbmScJgEpl5SJrqRk5ieg+LDpWtfSw8qXfXlkK2B1S0jWrel6bUri1wlGUC4djg2Pqec/qeDI605b2fjPQsO1na4+e0QvrSOJc0hoKmkdlq0uG5yOKauzWa+6w1m12eeaXdWFy3V6bM987NrNLv/zeMTCNvwWul/aYAD6tc69Wsz61K5Hja3Pbv/Jo+aQlzkeZLzz+wBPFlof/W1yxG0wWJCo4RNaAwHBTD2myqBXSa0yNhrSYKdaVtacqAWuxpOZaUGTNNfjsRkjXoPaTRUDrYWYzDsTZbCJzGI9UPiQETixoYGufNYoKSQ5aZ3ViaSIXFQpIEzKJ+pNroWISkdZUksr0jKF5tWMosppspwKpqQFnIj/VQkqq5UyYNwiq6OzWhKH83LNazDcH82JLKu1NYWsVnGkm5QKrKPdpss16o4fTic1JrE4oMKUcKq54WGFw9KOY7OUacURFKh5FI3fRpVvLolkW8tA0f/zeMTVNZQOpn7aUVWFFQ3bvt99pfpSvNxbGixnRqSsdh+tDazoZgmy1B/rbjwDAzUXSfyrKoxCXdLhHIp6LicDA8MywqOVlbDOJZJ6fH4gioTl6p5KfwFwR6pL8ngxYb8/xowqSjirLs/ZZGhu40wureLXD11YolpzFT75w7C+w+fOPrGWi3MMPzzzd5autteY8admKkf0vR1cztW43bLa2has7WD8V1oznTla9z7HZRy0e2reaVrnOXmOjvwbZNsx1qxWXHqexe7PusNNdMFX6T0f/vOYz23ym/ub07AwACpoaIeqZ3SHe2ul7fThCM0Mgy+FjR56GgyZCv/zaMTtNDwOll1aYAEGYaABmwBGmB6YhGrNDQotMRjYwaFF6AwkmAyCZUBQBCRCRRFS1MioAZ4HE0JogWITgSCScBxdSQkERbBQRgBhCoUOlgDL3YHhSOaPympgACHBGxYYDABgcvUuaWxUBfxfiE2HGgL7h4Qg1CmyIMhh4AgFOxGDa8KgEy0lEd3crpqpMJepep1QI9zdFUFSq/TwQuLbFuS+yi3uwql1L9kKQylij7C3ggprylzXWpMIYWu9aETYckKiq4iacbb9+32XQk7bWuvxsVtnTf/zmMTnYNQWdx+c0ADWERJ8mgPo8bjTTOGX0zXWmIPOMsCrM7UZbi4S6m4MIaI/TvSlcklj8rcF438YzJlFF2wC1yFSyyoI0qMI2xF+GeyNujgwHJHCeljU0u5/pM3FyXKcFkTlS+fij8vBS1nifD5W9zWZVFFly+/FoPj0Yu/XksMu7Fo1Xtz7owiSwZEJyBJe6EUlcshl2nBUxwgWkg5w5e/zWWss6UyqJwWARglGgsGgzGY7FQABlc5CQ/N9aM24aP8wUIQSCTKb/MoJ3/MLAUs6DiwYVAX+W5FVA5SwKGoXR/+rMRCMC2fu03WEWP//MhWFJjNkL9LuERWGrSGC///6AZ00HVSrAoKLRbMuZlTwipP///1uBhoYg6B1MVgU5nfbA+0/Zhn////2GKrs9TaYPH4FmY1SULgwm1KbNXX/////6pWvF3mAu816ZjD8ueqRqEaZDKYk3WU2IalURX04X//////ziMS+Q6PGZv+cwED//+98HUkWlc/CZFHYhBMwwaHZbTySVT0MympQymilVaUwVEv/////////6tB+q9Nct0MtoOWrr7TckzcmIZ81TQDEbF2UzsqrX5TWtRHVNapMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/zGMTCAAADSAHAAACqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqg==\"\r\n    }],\r\n    \"providers\": [{\r\n        \"id\": 1\r\n    }]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"messages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "UploadFile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "ddsd",
+									"type": "file",
+									"src": "/D:/Downloads/hw-cloud-infra (2).png"
+								},
+								{
+									"key": "",
+									"type": "file",
+									"src": "/D:/Downloads/audio.wav"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/files",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"files"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DownloadFile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/files/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"files",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetFileMetadata",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/files/1/meta",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"meta"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Sigin",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/sign",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"sign"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chatbot",
+			"item": [
+				{
+					"name": "UpdateChatbotStatus",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers/16/chatbot-status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"16",
+								"chatbot-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetChatbotStatus",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/providers/16/chatbot-status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"16",
+								"chatbot-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetChatbotFlow",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers/16/chatbot-flow",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"16",
+								"chatbot-flow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateChatbotFlow",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"chatbotActive\": true,\r\n  \"chatbotMessages\": {\r\n    \"id\": \"inicial\",\r\n    \"label\": \"menu\",\r\n    \"patternType\": 5,\r\n    \"pattern\": \".*\",\r\n    \"output\": [\r\n      {\r\n        \"type\": \"text\",\r\n        \"content\": \"Menu:\\n1 - Sobre o aplicativo\\n2 - Como contratar\\n3 - Suporte\\nEscolha uma opção acima!\"\r\n      }\r\n    ],\r\n    \"childs\": [\r\n      {\r\n        \"id\": \"sobre\",\r\n        \"label\": \"1 - Sobre\",\r\n        \"patternType\": 4,\r\n        \"pattern\": \"1\",\r\n        \"output\": [\r\n          {\r\n            \"type\": \"text\",\r\n            \"content\": \"App para envio de notificações e chatbot do whatsapp\"\r\n          }\r\n        ],\r\n        \"childs\": []\r\n      },\r\n      {\r\n        \"id\": \"suporte\",\r\n        \"label\": \"2 - Suporte\",\r\n        \"patternType\": 4,\r\n        \"pattern\": \"2\",\r\n        \"output\": [\r\n          {\r\n            \"type\": \"text\",\r\n            \"content\": \"1 - Esqueceu a senha?\\n2 - Outros\"\r\n          }\r\n        ],\r\n        \"childs\": [\r\n          {\r\n            \"id\": \"senha\",\r\n            \"label\": \"1 - Senha\",\r\n            \"patternType\": 4,\r\n            \"pattern\": \"1\",\r\n            \"output\": [\r\n              {\r\n                \"type\": \"text\",\r\n                \"content\": \"Acesse o link e redefina a senha https://test.wprmdev.com/senha\"\r\n              }\r\n            ],\r\n            \"childs\": []\r\n          },\r\n          {\r\n            \"id\": \"outros\",\r\n            \"label\": \"2 - Outros\",\r\n            \"patternType\": 4,\r\n            \"pattern\": \"2\",\r\n            \"output\": [\r\n              {\r\n                \"type\": \"text\",\r\n                \"content\": \"Descreva seu problema e envie Pronto quando terminar\"\r\n              }\r\n            ],\r\n            \"childs\": [\r\n              {\r\n                \"id\": \"pronto\",\r\n                \"label\": \"Pronto\",\r\n                \"patternType\": 4,\r\n                \"pattern\": \"pronto\",\r\n                \"output\": [\r\n                  {\r\n                    \"type\": \"text\",\r\n                    \"content\": \"Logo entraremos em contato\"\r\n                  }\r\n                ],\r\n                \"childs\": []\r\n              }\r\n            ]\r\n          }\r\n        ]\r\n      }\r\n    ]\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/providers/16/chatbot-flow",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"providers",
+								"16",
+								"chatbot-flow"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

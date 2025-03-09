@@ -13,6 +13,7 @@ Uma API unificada para envio de mensagens para múltiplos provedores. Atualmente
 - **Docker** - Facilita a execução e implantação do projeto.
 - **Use Cases** - Arquitetura baseada em casos de uso para melhor organização do código.
 - **CI/CD Pipeline** - Deploy automático configurado para facilitar a entrega contínua. (Deploy em VPS com coolify e em VPS sem painel via ssh)
+- **AWS EC2 Setup** - Configuração de instância EC2 para execução da API.
 
 ## 📦 Instalação e Execução
 
@@ -26,6 +27,9 @@ cd MessagingApi
 npm install
 
 cp .env.example .env
+
+# Add migration
+# npx prisma migrate dev --name migration_name
 
 npm run migrate
 
@@ -189,9 +193,7 @@ A coleção completa de endpoints está disponível no arquivo [`postman.json`](
 
 ## ✅ Próximas Implementações
 
-- Implementar endpoint de criação de conta (Atualmente não é permitido criar contas. A conta é registrada direto no banco)
-- Permitir múltiplos ChatBots 🤖
 - Implementação do suporte a **E-mail** 📧
 - Implementação do suporte a **SMS** 📱
 - Implementação do suporte a **Telegram** 💬
-- Melhorias na documentação 📝
+- Permitir múltiplos ChatBots 🤖

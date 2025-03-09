@@ -1,6 +1,6 @@
 import { Hash } from "@/common/crypto/hash";
-import { UseCase } from "../../../common/use-cases";
-import { DatabaseServices } from "../../../database/di-register";
+import { UseCase } from "@/common/use-cases";
+import { DatabaseServices } from "@/database/di-register";
 
 
 export class FindAccountByUserPass implements UseCase<FindAccountByUserPassInput, FindAccountByUserPassResult | null> {

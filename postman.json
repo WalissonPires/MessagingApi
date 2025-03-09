@@ -504,6 +504,36 @@
 					"response": []
 				},
 				{
+					"name": "CreateAccount",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"registerCode\": \"my-test-key\",\r\n    \"account\": {\r\n        \"name\": \"test2\",\r\n        \"username\": \"test2\",\r\n        \"password\": \"teste123\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/account",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Me",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true

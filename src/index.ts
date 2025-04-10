@@ -12,4 +12,19 @@ import { Server } from "./server";
         process.exit(1);
     }
 
+    process.on('unhandledRejection', async (reason, promise) => {
+
+        console.log('Unhandled Error: ', reason);
+
+        const whiteListError = [
+            'Execution context was destroyed',
+        ];
+        const errorMessage = reason instanceof Error ? reason.message : String(reason);
+
+        if (whiteListError.includes(errorMessage)) {
+            return;
+        }
+        process.exit(1);
+    });
+
 })();

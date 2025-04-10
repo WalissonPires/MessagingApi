@@ -181,10 +181,10 @@ export class WhatsAppService implements IWhatsAppService {
                 headless: process.env.PUPPERTER_HEADLESS != 'false',
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             },
-            webVersionCache: {
-                type: 'remote',
-                remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2403.3-beta.html'
-            }
+            // webVersionCache: {
+            //     type: 'remote',
+            //     remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2403.3-beta.html'
+            // }
             //webVersion: "2.2325.3" // Essa versão rodando o chrome da o erro: Código de erro: Out of Memory
         });
 

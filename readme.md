@@ -43,7 +43,7 @@ docker build -t messaging:latest .
 
 docker tag messaging:latest registry.dev.wprm.com.br/messaging:latest
 
-sudo docker push registry.dev.wprm.com.br/messaging:latest
+docker push registry.dev.wprm.com.br/messaging:latest
 
 docker run -d -p 5000:3000 \
   -e JWT_SECRET="MY-SECRET" \

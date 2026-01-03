@@ -27,6 +27,16 @@ export class SendMessage implements UseCase<SendMessageInput, SendMessageStatus[
         let providers = await this._findProviders.execute({});
 
         if (input.providers?.length! > 0) {
+
+            const notFoundProviders = input.providers!.filter(x => !providers.some(p => p.id === x.id));
+            for(const notFoundProvider of notFoundProviders) {
+                result.push({
+                    providerId: notFoundProvider.id,
+                    success: false,
+                    errorMessage: 'Provider not found'
+                });
+            }
+
             providers = providers.filter(provider => input.providers!.some(x => x.id === provider.id));
         }
 

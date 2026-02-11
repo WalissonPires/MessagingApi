@@ -30,7 +30,8 @@ export class InitProvider implements UseCase<InitProviderInput, void> {
 
         const service = this._messagingFactory.getService({
             providerId: provider.id,
-            providerType: provider.type
+            providerType: provider.type,
+            config: provider.config
         });
 
         const { status } = await service.getState();

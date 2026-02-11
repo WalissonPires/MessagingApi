@@ -29,7 +29,8 @@ export class FinalizeProvider implements UseCase<FinalizeProviderInput, void> {
 
         const service = this._messagingFactory.getService({
             providerId: provider.id,
-            providerType: provider.type
+            providerType: provider.type,
+            config: provider.config
         });
 
         const { status } = await service.getState();

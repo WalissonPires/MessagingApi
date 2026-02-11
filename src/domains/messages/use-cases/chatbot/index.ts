@@ -9,7 +9,7 @@ import { AppError } from "../../../../common/errors/app-error";
 import { ChatBotStateMachine, ChatNodeOutputType, ChatNodePatternType, injectExitNode } from "../../utils/chatbot";
 import { MessagingFactory } from "../../services/messaging/factory";
 import { MessagesServices } from "../../di-register";
-import { ProviderType } from "../../../providers/entities/provider";
+import { IProviderConfig, ProviderType } from "../../../providers/entities/provider";
 import { IProviderConfigChatbotFlow } from "./base";
 
 export class Chatbot implements UseCase<MessageReceivedContext, void> {
@@ -48,7 +48,7 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
             if (!provider.config)
                 return;
 
-            const config = JSON.parse(provider.config) as IProviderConfigChatbotFlow ?? {};
+            const config = JSON.parse(provider.config ?? '{}') as IProviderConfigChatbotFlow ?? {};
 
             if (!config.chatbotActive)
                 return;
@@ -63,6 +63,7 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
                 accountId: provider.accountId,
                 providerId: provider.id,
                 providerType: provider.type as ProviderType,
+                providerConfig: config,
                 chatbot: new ChatBotStateMachine(chatbotRootNode, null),
                 lastMessage: null
             };
@@ -70,9 +71,13 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
             Chatbot._contactsChat[contactChatKey] = contactContext;
         }
 
-        const { chatbot, providerId, providerType } = contactContext;
+        const { chatbot, providerId, providerType, providerConfig } = contactContext;
 
-        const service = this._messagingFactory.getService({ providerId: providerId, providerType: providerType as ProviderType });
+        const service = this._messagingFactory.getService({
+            providerId: providerId,
+            providerType: providerType as ProviderType,
+            config: providerConfig
+        });
 
         // const { status } = await service.getState();
         // if (status !== Status.Ready)
@@ -146,9 +151,9 @@ export class Chatbot implements UseCase<MessageReceivedContext, void> {
     private static _contactsChat: Record<string, ContactContext> = {};
     private static _providersListerning: Record<number, boolean> = {};
 
-    public static async registerProviderListerner(providerId: number, service: MessegingService) {
+    public static async registerProviderListerner(providerId: number, service: MessegingService, override: boolean = false) {
 
-        if (this._providersListerning[providerId])
+        if (this._providersListerning[providerId] && !override)
             return;
 
         service.addListenerMessageReceived(Chatbot.handlerMessageReceived);
@@ -178,6 +183,7 @@ interface ContactContext {
     accountId: number;
     providerId: number;
     providerType: ProviderType;
+    providerConfig: IProviderConfig | null;
     chatbot: ChatBotStateMachine;
     lastMessage: Date | null;
 }

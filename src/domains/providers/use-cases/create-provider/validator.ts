@@ -31,6 +31,15 @@ export class CreateProviderValidator implements Validator<CreateProviderInput> {
             })
         };
 
+        const evolutionConfigSchema = {
+            type: z.literal(ProviderType.WhatsappEvolution),
+            config: z.object({
+                apiUrl: z.string().url(),
+                token: z.string().min(1),
+                instanceName: z.string().min(1)
+            })
+        };
+
         const whatsappSchema = {
             ...baseSchema,
             ...whatsappConfigSchema
@@ -41,7 +50,16 @@ export class CreateProviderValidator implements Validator<CreateProviderInput> {
             ...emailConfigSchema
         };
 
-        const providerSchema = z.discriminatedUnion('type', [ z.object(whatsappSchema), z.object(emailSchema) ] );
+        const evolutionSchema = {
+            ...baseSchema,
+            ...evolutionConfigSchema
+        };
+
+        const providerSchema = z.discriminatedUnion('type', [
+            z.object(whatsappSchema),
+            z.object(emailSchema),
+            z.object(evolutionSchema)
+        ] );
 
         const schema = z.object({
             provider: providerSchema

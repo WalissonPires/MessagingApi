@@ -43,6 +43,7 @@ interface ProviderProps {
 export enum ProviderType {
     Email = 'email',
     Whatsapp = 'whatsapp',
+    WhatsappEvolution = 'whatsapp-evolution',
     SMS = 'sms'
 }
 

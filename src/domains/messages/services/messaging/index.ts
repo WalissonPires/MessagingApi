@@ -9,6 +9,10 @@ export interface MessegingService {
     addListenerMessageReceived: (handler: MessageReceivedHandler) => void;
 }
 
+export interface MessegingServiceReceiver {
+    processMessage(payload: any): Promise<void>;
+}
+
 export interface MessegingServiceAuthQrCode {
     getQrCode(): Promise<QrCodeResult>;
 }
@@ -68,5 +72,13 @@ export class MessegingServiceUtils {
     public static IsAuthQrCode(service: unknown): service is MessegingServiceAuthQrCode {
 
         return typeof (service as MessegingServiceAuthQrCode).getQrCode === 'function';
+    }
+}
+
+export class MessegingServiceReceiverUtils {
+
+    public static IsReceiver(service: unknown): service is MessegingServiceReceiver {
+
+        return typeof (service as MessegingServiceReceiver).processMessage === 'function';
     }
 }

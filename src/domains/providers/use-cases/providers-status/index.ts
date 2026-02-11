@@ -41,7 +41,11 @@ export class GetProvidersStatus implements UseCase<GetProvidersStatusInput, Prov
 
         for(const provider of providers) {
 
-            const service = this._messagingFactory.getService({ providerId: provider.id, providerType: provider.type });
+            const service = this._messagingFactory.getService({
+                providerId: provider.id,
+                providerType: provider.type,
+                config: provider.config
+            });
             const state = await service.getState();
 
             const providerStatus: ProvidersStatus = {

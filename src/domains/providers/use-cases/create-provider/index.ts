@@ -8,6 +8,7 @@ import { ProvidersRepository } from "../../repositories/providers-repository";
 import { CreateProviderValidator } from "./validator";
 import { CreateProviderInput } from "./models";
 import { IEmailProviderConfig, isIEmailProviderConfig } from "../../entities/email-provider";
+import { IWhatsappEvolutionConfig } from "../../entities/whatsapp-evolution-config";
 
 export class CreateProvider implements UseCase<CreateProviderInput, Provider> {
 
@@ -78,6 +79,16 @@ export class CreateProvider implements UseCase<CreateProviderInput, Provider> {
                 };
 
                 provider.config = emailConfig;
+            break;
+
+            case ProviderType.WhatsappEvolution:
+
+                const evolutionConfig = input.provider.config as IWhatsappEvolutionConfig;
+                provider.config = {
+                    apiUrl: evolutionConfig.apiUrl,
+                    token: evolutionConfig.token,
+                    instanceName: evolutionConfig.instanceName
+                };
             break;
 
             default:

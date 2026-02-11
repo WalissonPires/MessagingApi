@@ -43,7 +43,11 @@ export class SendMessage implements UseCase<SendMessageInput, SendMessageStatus[
         for(const provider of providers) {
 
             try {
-                const service = this._messagingFactory.getService({ providerId: provider.id, providerType: provider.type });
+                const service = this._messagingFactory.getService({
+                    providerId: provider.id,
+                    providerType: provider.type,
+                    config: provider.config
+                });
 
                 const { status } = await service.getState();
 

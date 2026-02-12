@@ -17,6 +17,11 @@ export class AppConfig {
         return (this.getConfig('ENABLE_FASTIFY_LOG', false) ?? 'false').toLowerCase() === 'true';
     }
 
+    public webhookToken() {
+
+        return this.getConfig('WEBHOOK_TOKEN');
+    }
+
     public isDev() {
 
         return this.getConfig('NODE_ENV') === 'Development';

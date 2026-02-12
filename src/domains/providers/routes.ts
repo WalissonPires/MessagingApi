@@ -2,36 +2,22 @@ import { FastifyInstance } from "fastify";
 import { CreateProviderInput } from "./use-cases/create-provider/models";
 import { UpdateProviderChatbotFlowInput } from "./use-cases/update-provider-chatbot-flow";
 import { UpdateChatbotStatusInput } from "./use-cases/update-chatbot-status";
-import { MessegingServiceReceiver, MessegingServiceReceiverUtils } from "../messages/services/messaging";
-import { Chatbot } from "../messages/use-cases/chatbot";
 
 export default function (fastify: FastifyInstance) {
 
-    fastify.post<{ Params: { providerId: string } }>('/providers/:providerId/webhook', async (request, reply) => {
+    fastify.post<{ Params: { providerId: string }, Querystring: { accountId: string, token: string } }>('/providers/:providerId/webhook', async (request, reply) => {
 
-        const { getProviderById, messagingFactory, chatbot } = request.diScope.cradle;
+        console.log('Webhook received for provider ' + request.params.providerId);
+        console.log(request.body);
 
-        let providerId = parseInt(request.params.providerId);
-        providerId = isFinite(providerId) ? providerId : 0;
+        const { handleProviderWebhook } = request.diScope.cradle;
 
-        const provider = await getProviderById.execute({ providerId });
-
-        if (!provider) {
-            reply.status(404).send({ message: 'Provider not found' });
-            return;
-        }
-
-        const service = messagingFactory.getService({
-            providerId: provider.id,
-            providerType: provider.type,
-            config: provider.config
+        await handleProviderWebhook.execute({
+            token: request.query.token,
+            accountId: parseInt(request.query.accountId),
+            providerId: parseInt(request.params.providerId),
+            payload: request.body
         });
-
-        if (MessegingServiceReceiverUtils.IsReceiver(service)) {
-            // Registra o chatbot para processar mensagens recebidas se necessário
-            await Chatbot.registerProviderListerner(provider.id, service, true);
-            await service.processMessage(request.body);
-        }
 
         reply.status(204);
     });

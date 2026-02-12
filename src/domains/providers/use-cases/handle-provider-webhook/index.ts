@@ -30,7 +30,7 @@ export class HandleProviderWebhook implements UseCase<HandleProviderWebhookInput
     if (input.token !== webhookToken)
       throw new AppError('Invalid token');
 
-    if (!input.accountId)
+    if (!isFinite(input.accountId))
       throw new AppError('Invalid accountId');
 
     this._user.isAuthenticated = true;

@@ -1,5 +1,5 @@
 ARG NODE_VERSION=20.14.0
-FROM node:${NODE_VERSION}-slim as base
+FROM node:${NODE_VERSION}-slim AS base
 
 LABEL fly_launch_runtime="Node.js"
 
@@ -11,7 +11,7 @@ ENV NODE_ENV=production
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build node modules
 #RUN apt-get update -qq && \
@@ -48,18 +48,10 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Install puppeteer so it's available in the container.
-RUN npm i puppeteer \
-    # Add user so we don't need --no-sandbox.
-    # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
-    && groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
-    && mkdir -p /home/pptruser/Downloads \
-    && mkdir /app/.wwebjs_auth \
-    && mkdir /app/.wwebjs_cache \
-    && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /app/.wwebjs_auth \
-    && chown -R pptruser:pptruser /app/.wwebjs_cache \
-    && chown -R pptruser:pptruser node_modules
+# Create non-root user and runtime directories.
+RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
+    && mkdir -p /home/pptruser/Downloads /app/.wwebjs_auth /app/.wwebjs_cache \
+    && chown -R pptruser:pptruser /home/pptruser /app/.wwebjs_auth /app/.wwebjs_cache
 
 # Run everything after as non-privileged user.
 USER pptruser

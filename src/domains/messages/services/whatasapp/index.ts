@@ -136,8 +136,14 @@ export class WhatsAppService implements IWhatsAppService {
 
         this._client.on('message', async (message) => {
 
-            if (message.from.startsWith(this._client.info.wid.user) || message.from === 'status@broadcast')
+            if (message.from === 'status@broadcast')
                 return;
+
+            if (message.from.startsWith(this._client.info.wid.user)) {
+
+                if (message.body?.toLowerCase() !== 'pausar')
+                    return;
+            }
 
             const from = message.from.substring(0, message.from.indexOf('@'));
 
